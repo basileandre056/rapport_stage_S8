@@ -1,0 +1,244 @@
+%================================================================================
+%  TEMPLATE DE RAPPORT DE STAGE – ENIB + DEAL
+%================================================================================
+
+\documentclass[12pt,a4paper]{report}
+
+% ------------------------------------------
+% PACKAGES
+% ------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{geometry}
+
+\geometry{
+  left=2cm,
+  right=2cm,
+  top=2cm,
+  bottom=2.5cm
+}
+
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{tocloft}
+
+\onehalfspacing
+
+
+
+
+
+% Correction du warning fancyhdr
+\setlength{\headsep}{12pt}  % valeur par défaut : 25pt
+\setlength{\headheight}{42pt}
+\setlength{\footskip}{22pt}
+\addtolength{\topmargin}{-2pt}
+
+% ------------------------------------------
+% COULEURS
+% ------------------------------------------
+\definecolor{ENIBblue}{RGB}{5,55,105}
+
+% ------------------------------------------
+% STYLE TITRES (version unifiée et cohérente)
+% ------------------------------------------
+
+% Chapitres numérotés — BLEU
+\titleformat{\chapter}
+  {\Huge\bfseries\color{ENIBblue}}
+  {\thechapter.\ }
+  {0.5em}{}
+
+\titlespacing*{\chapter}{0pt}{0pt}{1em}
+
+% Sections — BLEU (et saut de page)
+\titleformat{\section}
+  {\Large\bfseries\color{ENIBblue}}
+  {\thesection.\ }{0.5em}{}
+\titlespacing*{\section}{0pt}{*4}{1em}
+
+% Force les sections à commencer sur une nouvelle page
+\usepackage{etoolbox}
+\preto\section{\clearpage}
+
+% Sous-sections — NOIR
+\titleformat{\subsection}
+  {\large\bfseries\color{black}}
+  {\thesubsection.\ }{0.5em}{}
+
+% Chapitres non numérotés — BLEU (même style que les chapitres)
+\newcommand{\BlueChapter}[1]{%
+  \clearpage
+  \phantomsection
+  {\Huge\bfseries\color{ENIBblue}#1}%
+  \addcontentsline{toc}{chapter}{#1}%
+  \vspace{1em}%
+}
+
+% ------------------------------------------
+% TABLE DES MATIÈRES — BLEU
+% ------------------------------------------
+\renewcommand{\cfttoctitlefont}{\Huge\bfseries\color{ENIBblue}}
+\renewcommand{\cftloftitlefont}{\Huge\bfseries\color{ENIBblue}}
+
+\renewcommand{\cftchapfont}{\bfseries\color{ENIBblue}}
+\renewcommand{\cftchappagefont}{\bfseries\color{ENIBblue}}
+
+% ------------------------------------------
+% INFORMATIONS DU RAPPORT
+% ------------------------------------------
+\newcommand{\StudentName}{Basile ANDRE}
+\newcommand{\StudentEmail}{b1andre@enib.fr}
+\newcommand{\StageShortTitle}{Développement Géonature}
+\newcommand{\StageTitle}{Développement d'un module externe de l'application Géonature pour importer les données de Quadrige}
+\newcommand{\DatesStage}{Septembre – Décembre 2025}
+\newcommand{\Entreprise}{DEAL Réunion}
+\newcommand{\TuteurEntr}{Bouilly Rémi}
+\newcommand{\TuteurAcad}{Jean-François Favennec}
+
+% ------------------------------------------
+% PAGE DE GARDE (COMPLÈTE)
+% ------------------------------------------
+\newcommand{\PageDeGarde}{
+\begin{titlepage}
+\thispagestyle{empty}
+
+\noindent
+\begin{minipage}[t][0.48\textheight][t]{\textwidth}
+    \includegraphics[width=\textwidth, height=0.48\textheight]{images/logos/Corail-ile-de-la-reunion.jpg}
+
+    \vspace*{-0.48\textheight}
+    \begin{minipage}[t]{\textwidth}
+        \vspace{0.6cm}
+
+        \begin{minipage}{0.5\textwidth}
+            \hspace{0.2cm}
+            \includegraphics[height=1.7cm]{images/logos/logo_DEAL.jpg}
+        \end{minipage}
+        \begin{minipage}{0.48\textwidth}
+            \raggedleft
+            {\Large\color{white}\DatesStage\hspace{0.2cm}}
+        \end{minipage}
+
+        \vspace{1.6cm}
+        \begin{minipage}{0.6\textwidth}
+            \raggedright
+            \hspace{0.2cm}{\Large\bfseries\color{white}\Entreprise}\\
+            \hspace{0.2cm}{\Large\bfseries\color{white}ENIB}
+        \end{minipage}
+
+        \vspace{1.8cm}
+        \begin{center}
+            {\fontsize{28}{32}\selectfont\bfseries\color{white}\StageShortTitle}
+        \end{center}
+    \end{minipage}
+\end{minipage}
+
+\vspace{1.8cm}
+\begin{minipage}{0.6\textwidth}
+    \textbf{Stagiaire :} \StudentName\\[0.25cm]
+    \textbf{Tuteur entreprise :} \TuteurEntr\\[0.25cm]
+    \textbf{Tuteur académique :} \TuteurAcad
+\end{minipage}
+
+\vfill
+
+\begin{center}
+    \begin{minipage}{0.25\textwidth}
+        \centering
+        \includegraphics[height=1.1cm]{images/logos/Enib_inp_2025.png}
+    \end{minipage}
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \rule{\textwidth}{0.4pt}
+    \end{minipage}
+    \begin{minipage}{0.25\textwidth}
+        \raggedleft {\small \StudentEmail}
+    \end{minipage}
+
+    \vspace{0.25cm}
+    {\Large\bfseries \StudentName}
+\end{center}
+
+\end{titlepage}
+}
+
+% ------------------------------------------
+% EN-TÊTE + PIED DE PAGE
+% ------------------------------------------
+\renewcommand{\headrulewidth}{0.8pt}
+\renewcommand{\headrule}{\color{ENIBblue}\rule{\headwidth}{0.8pt}}
+
+\fancypagestyle{standard}{
+    \fancyhf{}
+
+    \fancyhead[L]{\includegraphics[height=0.9cm]{images/logos/Enib_inp_2025.png}}
+    \fancyhead[R]{\includegraphics[height=0.9cm]{images/logos/logo_DEAL.jpg}}
+
+    \fancyfoot[C]{\color{ENIBblue}\rule{\textwidth}{0.4pt}}
+    \fancyfoot[L]{\small\color{ENIBblue} \StudentEmail}
+    \fancyfoot[C]{\small\color{ENIBblue} Stage Assistant Ingénieur\\[-0.2em]\textbf{\StageShortTitle}}
+    \fancyfoot[R]{\small\color{ENIBblue} \thepage}
+}
+
+\makeatletter
+\let\ps@plain\ps@standard
+\makeatother
+
+%===============================================================================
+% DOCUMENT
+%===============================================================================
+\begin{document}
+
+\PageDeGarde
+
+\pagestyle{standard}
+\setcounter{page}{1}
+
+% ------------------------------------------
+% CHAPITRES NON NUMÉROTÉS
+% ------------------------------------------
+\BlueChapter{Remerciements}
+
+\BlueChapter{Résumé (FR)}
+
+\BlueChapter{Abstract (EN)}
+
+% ------------------------------------------
+% TABLE DES MATIÈRES ET FIGURES
+% ------------------------------------------
+\tableofcontents
+\newpage
+
+\listoffigures
+\newpage
+
+% ------------------------------------------
+% CHAPITRES NUMÉROTÉS
+% ------------------------------------------
+\chapter{Présentation de l'entreprise}
+\chapter{Diagnostic RSE}
+\chapter{Organisation du stage}
+\chapter{Travaux réalisés et compétences acquises}
+\chapter{Perspectives}
+\chapter{Conclusion}
+
+% ------------------------------------------
+% BIBLIOGRAPHIE
+% ------------------------------------------
+\BlueChapter{Bibliographie}
+(à compléter)
+
+% ------------------------------------------
+% ANNEXES
+% ------------------------------------------
+\appendix
+\chapter{Annexes}
+
+\end{document}
