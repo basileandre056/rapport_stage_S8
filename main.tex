@@ -46,40 +46,46 @@
 \definecolor{ENIBblue}{RGB}{5,55,105}
 
 % ------------------------------------------
-% STYLE TITRES (version unifiée et cohérente)
+% STYLE TITRES (harmonisé)
 % ------------------------------------------
 
-% Chapitres numérotés — BLEU
+% ===== CHAPITRES NUMÉROTÉS =====
 \titleformat{\chapter}
   {\Huge\bfseries\color{ENIBblue}}
-  {\thechapter.\ }
-  {0.5em}{}
+  {\thechapter.\ }{0.75em}{}
+\titlespacing*{\chapter}{0pt}{0pt}{2em}
 
-\titlespacing*{\chapter}{0pt}{0pt}{1em}
+% Amélioration : éviter page blanche inutile avant le premier chapitre
+\preto\chapter{%
+  \ifnum\value{page}>1\clearpage\fi
+}
 
-% Sections — BLEU (et saut de page)
-\titleformat{\section}
-  {\Large\bfseries\color{ENIBblue}}
-  {\thesection.\ }{0.5em}{}
-\titlespacing*{\section}{0pt}{*4}{1em}
 
-% Force les sections à commencer sur une nouvelle page
-\usepackage{etoolbox}
-\preto\section{\clearpage}
 
-% Sous-sections — NOIR
-\titleformat{\subsection}
-  {\large\bfseries\color{black}}
-  {\thesubsection.\ }{0.5em}{}
-
-% Chapitres non numérotés — BLEU (même style que les chapitres)
+% ===== CHAPITRES NON NUMÉROTÉS =====
 \newcommand{\BlueChapter}[1]{%
   \clearpage
   \phantomsection
-  {\Huge\bfseries\color{ENIBblue}#1}%
+  {\Huge\bfseries\color{ENIBblue}#1}\par
   \addcontentsline{toc}{chapter}{#1}%
-  \vspace{1.5em}%
+  \vspace{2em}%
 }
+
+% ===== SECTIONS =====
+\titleformat{\section}
+  {\Large\bfseries\color{ENIBblue}}
+  {\thesection.\ }{0.75em}{}
+\titlespacing*{\section}{0pt}{0pt}{1.5em}
+
+% Forcer chaque section à commencer sur une nouvelle page
+\preto\section{\clearpage}
+
+% ===== SOUS-SECTIONS =====
+\titleformat{\subsection}
+  {\large\bfseries\color{black}}
+  {\thesubsection.\ }{0.75em}{}
+\titlespacing*{\subsection}{0pt}{1em}{0.8em}
+
 
 % ------------------------------------------
 % TABLE DES MATIÈRES — BLEU
@@ -89,6 +95,19 @@
 
 \renewcommand{\cftchapfont}{\bfseries\color{ENIBblue}}
 \renewcommand{\cftchappagefont}{\bfseries\color{ENIBblue}}
+
+
+
+% Style du titre de la table des matières
+\renewcommand{\contentsname}{\color{ENIBblue}\Huge\bfseries Table des matières}
+
+% Style du titre de la liste des figures
+\renewcommand{\listfigurename}{\color{ENIBblue}\Huge\bfseries Liste des figures}
+
+% Style français des annexes
+\addto\captionsfrench{%
+  \renewcommand{\appendixname}{Annexe}
+}
 
 % ------------------------------------------
 % INFORMATIONS DU RAPPORT
