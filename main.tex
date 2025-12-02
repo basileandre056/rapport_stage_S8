@@ -27,6 +27,7 @@
 \usepackage{fancyhdr}
 \usepackage{color}
 \usepackage{tocloft}
+\usepackage{float}
 
 \onehalfspacing
 
@@ -68,23 +69,22 @@
   \phantomsection
   {\Huge\bfseries\color{ENIBblue}#1}\par
   \addcontentsline{toc}{chapter}{#1}%
-  \vspace{2em}%
+  \vspace{1em}
 }
 
 % ===== SECTIONS =====
 \titleformat{\section}
-  {\Large\bfseries\color{ENIBblue}}
+  {\large\bfseries\color{black}}
   {\thesection.\ }{0.75em}{}
-\titlespacing*{\section}{0pt}{0pt}{1.5em}
+\titlespacing*{\section}{0pt}{1em}{0.8em}
 
-% Forcer chaque section à commencer sur une nouvelle page
-\preto\section{\clearpage}
+
 
 % ===== SOUS-SECTIONS =====
 \titleformat{\subsection}
-  {\large\bfseries\color{black}}
+  {\normalsize\bfseries\color{black}}
   {\thesubsection.\ }{0.75em}{}
-\titlespacing*{\subsection}{0pt}{1em}{0.8em}
+\titlespacing*{\subsection}{0pt}{0.5em}{0.5em}
 
 
 % ------------------------------------------
@@ -157,8 +157,8 @@
             {\fontsize{28}{32}\selectfont\bfseries\color{white}\StageShortTitle}
         \end{center}
 
-    \end{minipage} % ← ❗️ minipage interne correctement fermé
-\end{minipage}    % ← ❗️ minipage externe
+    \end{minipage} 
+\end{minipage}   
 
 \vspace{1.8cm}
 \begin{minipage}{0.6\textwidth}
@@ -246,7 +246,13 @@
 % CHAPITRES NUMÉROTÉS
 % ------------------------------------------
 \chapter{Présentation de l'entreprise}
-\chapter{Diagnostic RSE}
+
+\section{DEAL Réunion}
+\input{chapters/presentation_entreprise/presentation_deal}
+
+\section{Diagnostic RSE}
+
+
 \chapter{Organisation du stage}
 \chapter{Travaux réalisés et compétences acquises}
 \chapter{Perspectives}
@@ -261,7 +267,9 @@
 % ------------------------------------------
 % ANNEXES
 % ------------------------------------------
-\appendix
-\chapter{Annexes}
+\BlueChapter{Annexes}
+\input{chapters/annexes}
+
+
 
 \end{document}
