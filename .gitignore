@@ -1,0 +1,40 @@
+# --- Fichiers générés par LaTeX ---
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.brf
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.fls
+*.fdb_latexmk
+
+# --- Fichiers PDF générés (optionnel) ---
+# Si tu veux empêcher le PDF d’être commité, décommente :
+# *.pdf
+
+# --- Fichiers VS Code ---
+.vscode/
+*.code-workspace
+
+# --- Environnements, OS ---
+.DS_Store
+Thumbs.db
+
+# --- Build tools (latexmk, arara, etc.) ---
+latexmkrc
+*.dvi
+*.ps
+*.xdv
+
+# --- Backup ---
+*.bak
+*~

@@ -9,7 +9,7 @@
 % ------------------------------------------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[french]{babel}
+\usepackage[main=french,provide=*]{babel}
 \usepackage{graphicx}
 \usepackage{lmodern}
 \usepackage{geometry}
@@ -137,8 +137,9 @@
         \begin{center}
             {\fontsize{28}{32}\selectfont\bfseries\color{white}\StageShortTitle}
         \end{center}
-    \end{minipage}
-\end{minipage}
+
+    \end{minipage} % ← ❗️ minipage interne correctement fermé
+\end{minipage}    % ← ❗️ minipage externe
 
 \vspace{1.8cm}
 \begin{minipage}{0.6\textwidth}
@@ -168,6 +169,7 @@
 
 \end{titlepage}
 }
+
 
 % ------------------------------------------
 % EN-TÊTE + PIED DE PAGE
@@ -207,8 +209,10 @@
 \BlueChapter{Remerciements}
 
 \BlueChapter{Résumé (FR)}
+\input{chapters/resume_fr}
 
 \BlueChapter{Abstract (EN)}
+\input{chapters/resume_en}
 
 % ------------------------------------------
 % TABLE DES MATIÈRES ET FIGURES
