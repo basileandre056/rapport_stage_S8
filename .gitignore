@@ -28,6 +28,8 @@
 *.glo
 *.gls
 *.ist
+main.glsdefs
+*.glsdefs
 
 # --- Fichiers PDF générés (optionnel) ---
 # *.pdf
