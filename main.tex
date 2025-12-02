@@ -29,6 +29,44 @@
 \usepackage{tocloft}
 \usepackage{float}
 
+% --- Glossaire ---
+\usepackage[acronym]{glossaries}
+\makeglossaries
+
+% --- Empêche printglossary de créer un saut de page + un titre automatique ---
+\renewcommand*{\glossarysection}[2][]{%
+    % Ne rien faire : pas de saut de page, pas de section automatique
+}
+
+% ------------------------------------------------------------------
+% Style personnalisé du glossaire : ENIBStyle
+% ------------------------------------------------------------------
+\newglossarystyle{enibstyle}{
+  \setglossarystyle{long}
+
+  % Désactive toute numérotation de pages en fin d'entrée
+  \renewcommand*{\glspostdescription}{}
+
+  % Style : acronyme en bleu ENIB
+  \renewcommand*{\glsnamefont}[1]{\textbf{\color{ENIBblue}##1}}
+
+  % Structure du tableau (2 colonnes)
+  \renewenvironment{theglossary}{
+    \begin{longtable}{@{}p{0.25\textwidth}p{0.72\textwidth}@{}}
+  }{
+    \end{longtable}
+  }
+
+  % Chaque entrée du glossaire (sans lignes)
+  \renewcommand{\glossentry}[2]{%
+    \glsentryitem{##1}%
+    \glstarget{##1}{\glossentryname{##1}} &
+    \glossentrydesc{##1}%
+    \tabularnewline
+  }
+}
+
+
 \onehalfspacing
 
 
@@ -215,6 +253,9 @@
 %===============================================================================
 % DOCUMENT
 %===============================================================================
+
+% Styles et mise en page
+
 \begin{document}
 
 \PageDeGarde
@@ -222,9 +263,9 @@
 \pagestyle{standard}
 \setcounter{page}{1}
 
+% début du contenu 
 % ------------------------------------------
-% CHAPITRES NON NUMÉROTÉS
-% ------------------------------------------
+
 \BlueChapter{Remerciements}
 
 \BlueChapter{Résumé (FR)}
@@ -234,12 +275,23 @@
 \input{chapters/resume_en}
 
 % ------------------------------------------
-% TABLE DES MATIÈRES ET FIGURES
+% TABLE DES MATIÈRES 
 % ------------------------------------------
 \clearpage        % force un saut de page
 \phantomsection   % assure une bonne ancre pour hyperref
 \tableofcontents
 \clearpage
+
+% GLOSSAIRE
+\BlueChapter{Glossaire}
+
+\begingroup
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{0pt}
+\printglossary[type=\acronymtype, style=enibstyle, title={}]
+\endgroup
+
+
 
 
 % ------------------------------------------
