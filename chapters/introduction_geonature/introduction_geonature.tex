@@ -1,0 +1,55 @@
+\section{Principe général de GeoNature}
+
+GeoNature est une application web dédiée à la gestion, la centralisation et la valorisation des
+données naturalistes. Développé initialement en 2010 puis entièrement refondu en 2017, le
+projet est aujourd’hui maintenu par le Parc national des Écrins. L’application repose sur une
+architecture moderne combinant un backend Python/Flask et un frontend Angular, ce qui lui
+permet d’assurer à la fois la saisie, la consultation, la validation et la restitution des données.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/back_front_geonature.png}
+    \caption{Architecture générale du backend et du frontend de GeoNature}
+    \label{fig:backfront}
+\end{figure}
+
+Le fonctionnement de GeoNature est modulaire : un noyau applicatif fournit les briques 
+communes (API, référentiels, schéma de synthèse), et différents modules viennent étendre les 
+fonctionnalités selon les besoins (Occtax, Occhab, Validation, Import, Export, etc.).  
+La documentation officielle détaille l’ensemble de cette architecture
+\href{https://docs.geonature.fr/}{(documentation officielle)}
+ainsi que les sources du projet, disponibles sur 
+\href{https://github.com/PnX-SI/GeoNature?tab=readme-ov-file}{GitHub}.
+
+
+\section{Architecture technique}
+
+GeoNature combine une partie serveur (backend) et une partie cliente (frontend) qui dialoguent
+via une API REST.
+
+Le backend est développé en Python à l’aide du framework Flask. Il assure l’ensemble des
+traitements métiers, l’accès aux données et la gestion des opérations spatiales via PostgreSQL
+et PostGIS. La gestion des utilisateurs et de leurs permissions repose sur UsersHub, qui fournit
+l’authentification et le contrôle des accès. L’API exposée par le backend constitue le point
+central de communication avec l’interface web.
+
+Le frontend, développé en Angular, constitue l’interface visible par l’utilisateur. Il interroge
+exclusivement l’API du backend pour afficher les formulaires, les cartes, les graphiques et les
+données attributaires. Des bibliothèques comme Leaflet ou Bootstrap renforcent les
+fonctionnalités cartographiques et l’ergonomie générale.  
+Cette séparation nette entre backend et frontend garantit la stabilité et la modularité du
+système, tout en facilitant les évolutions futures.
+
+
+\section{Organisation interne et modules}
+
+L’application est structurée autour de modules fonctionnels s’appuyant tous sur les mêmes
+référentiels : taxonomie (TaxHub), nomenclatures, utilisateurs (UsersHub) et schéma de
+synthèse. Les modules principaux — Occtax pour les observations, Occhab pour les habitats,
+ou encore la Validation — s’intègrent directement au cœur applicatif.
+
+Chaque module possède son propre schéma de base de données, son API et ses composants
+Angular. Cette organisation modulaire permet de faire évoluer GeoNature, d'ajouter de
+nouveaux protocoles d’acquisition ou de développer des extensions externes.  
+La documentation décrit précisément les bonnes pratiques et l’architecture à respecter pour
+développer un \href{https://docs.geonature.fr/development.html\#developper-un-module-externe}{module GeoNature externe}.

@@ -23,7 +23,6 @@
 
 \usepackage{titlesec}
 \usepackage{setspace}
-\usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{color}
 \usepackage{tocloft}
@@ -88,6 +87,8 @@
 % ------------------------------------------
 \definecolor{ENIBblue}{RGB}{5,55,105}
 
+
+
 % ------------------------------------------
 % STYLE TITRES (harmonisé)
 % ------------------------------------------
@@ -128,6 +129,11 @@
   {\thesubsection.\ }{0.75em}{}
 \titlespacing*{\subsection}{0pt}{0.5em}{0.5em}
 
+
+\usepackage[colorlinks=true,
+            linkcolor=black,
+            urlcolor=ENIBblue,
+            citecolor=ENIBblue]{hyperref}
 
 % ------------------------------------------
 % TABLE DES MATIÈRES — BLEU
@@ -329,10 +335,40 @@
 
 
 
-
+% ------------------------------------------
+% Organisation du stage
+%-------------------------------------------
 \chapter{Organisation du stage}
+
+% ------------------------------------------
+% Introduction au fonctionnement de Géonature
+% ------------------------------------------
+\chapter{Introduction à GeoNature}
+\input{chapters/introduction_geonature/introduction_geonature}
+
+
+
+
+
+
+
+% ------------------------------------------
+% Travaux réalisés et compétences acquises
+% ------------------------------------------
 \chapter{Travaux réalisés et compétences acquises}
+
+
+
+% ------------------------------------------
+% PERSPECTIVES ET CONCLUSION
+% ------------------------------------------
 \chapter{Perspectives}
+
+
+
+% ------------------------------------------
+% CONCLUSION
+% ------------------------------------------
 \chapter{Conclusion}
 
 % ------------------------------------------
