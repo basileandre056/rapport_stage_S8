@@ -1,0 +1,108 @@
+\section{Contexte du projet}
+
+Le \gls{sinp}, déployé à La Réunion au sein de l’application Borbonica, comporte encore très peu de
+données issues du milieu marin : selon le bilan 2024, moins de 10~\% des observations concernent
+des taxons marins. Cette sous-représentation constitue un frein à la connaissance de la
+biodiversité littorale et sous-marine de l’île.  
+
+À l’inverse, le système d’information \gls{quadrige}, maintenu par l’Ifremer, rassemble un volume
+considérable de données environnementales et biologiques collectées en mer. La mise en place,
+fin 2024, d’une nouvelle API GraphQL rend désormais possible l’interrogation directe et
+structurée de ces données, ouvrant la voie à une intégration plus large dans les outils du \gls{sinp}.
+
+Dans ce contexte, le projet a consisté à développer un \textbf{module externe GeoNature} capable
+d’interroger l'API de Quadrige, de récupérer les programmes pertinents pour La Réunion, d’en
+extraire les observations utiles, puis de produire un fichier d’import conforme aux spécifications
+du modèle \gls{sinp}. Le module devait s’intégrer naturellement à l’interface existante de GeoNature,
+offrir une exploration intuitive des programmes Quadrige, et préparer les données en vue de leur
+intégration finale dans Borbonica.  
+Ce développement s’inscrit ainsi dans la dynamique d’amélioration continue du \gls{sinp} Réunion et
+vise à renforcer la représentativité des données marines dans la base régionale.
+
+\section{Périmètre fonctionnel}
+
+Le module d’import devait couvrir l’ensemble de la chaîne d’acquisition : de la découverte des
+programmes Quadrige jusqu’à la production d’un fichier structuré pour GeoNature.  
+La première étape consistait à interroger l’API en mode authentifié afin d’obtenir la liste des
+programmes disponibles pour un utilisateur donné. Un filtrage automatique sur un périmètre
+géographique — principalement La Réunion, mais extensible à d’autres territoires comme les Îles
+Éparses — permettait d’isoler les programmes pertinents. Une interface dédiée intégrée à
+GeoNature offrait ensuite la possibilité de rechercher des programmes, d’affiner l’affichage par
+mots-clés et de sélectionner ceux à importer.
+
+Une fois les programmes choisis, l’utilisateur pouvait définir les filtres à appliquer aux données
+(la période d'intérêt, les champs souhaités, ou encore la reprise des stations déjà extraites).  
+Le module interrogeait alors l’API Quadrige pour récupérer les observations correspondantes.
+Seuls les champs utiles au modèle \gls{sinp} étaient extraits : identifiants des programmes et stations,
+localisation géographique, taxon observé, date, ainsi que les métadonnées essentielles (auteur,
+organisme, méthode d’acquisition, etc.). Une transformation était appliquée pour obtenir une
+structure compatible avec les mécanismes d’import de GeoNature.
+
+Enfin, le module produisait un fichier CSV intermédiaire, destiné à être importé via
+l’infrastructure existante de GeoNature. Chaque opération d’import était consignée dans un
+historique affiché dans un second onglet, permettant de suivre les actions réalisées, leur date,
+leur statut et les éventuelles erreurs rencontrées. L’ensemble du module était réservé aux
+administrateurs, conformément aux pratiques habituelles de contrôle des imports dans GeoNature.
+
+\section{Spécifications techniques}
+
+Techniquement, le module repose sur une architecture conforme à celle de GeoNature. Le
+\textbf{backend}, développé en Python avec le framework Flask, se charge de communiquer avec
+l’API Quadrige, d’effectuer les transformations nécessaires sur les données et de générer les
+fichiers d’export. Le \textbf{frontend}, construit en Angular et Bootstrap, s’intègre à l’interface
+existante de GeoNature et fournit les pages de sélection des programmes ainsi que l’historique
+des imports.
+
+La communication avec Quadrige s’effectue via des requêtes GraphQL, qui permettent d’obtenir
+uniquement les champs nécessaires, réduisant ainsi le volume de données transférées.  
+L’authentification repose sur un token fourni par l’Ifremer et configurable directement dans les
+paramètres du module. Les autres réglages comprennent l’URL de l’API, le périmètre
+géographique par défaut, ainsi que le mapping entre les champs Quadrige et les champs
+attendus par le schéma de synthèse de GeoNature.
+
+Un soin particulier a été apporté à la gestion des erreurs : vérification des réponses HTTP,
+détection des timeouts, contrôle de la validité des données, et affichage de messages explicites à
+l’utilisateur. Toutes les actions — appels API, transformations, exports — sont consignées dans les
+logs du module, conformément aux pratiques de GeoNature.
+
+\section{Contraintes, dépendances et livrables}
+
+La réussite du projet dépendait principalement de l’accessibilité de l’API Quadrige, de la
+stabilité de ses services, et de la disponibilité d’une documentation actualisée. L’intégration dans
+GeoNature nécessitait également de respecter la structure modulaire du noyau applicatif et les
+contraintes du modèle \gls{sinp}.
+
+Les livrables attendus comprenaient le code source du module, un fichier de configuration, une
+documentation à destination des administrateurs (installation, configuration, maintenance) ainsi
+qu’un guide d’utilisation orienté métier.
+
+Plusieurs évolutions ont été envisagées : automatisation des imports périodiques, gestion des
+imports incrémentaux, intégration à la gestion des droits de GeoNature et, à plus long terme,
+publication du module dans le catalogue officiel des extensions GeoNature.
+
+\section{Liens utiles}
+
+Pour accompagner le développement, plusieurs ressources officielles ont été mobilisées :
+
+\subsection*{Quadrige}
+\begin{itemize}
+    \item Documentation API : \url{https://…}
+    \item Portail d’assistance : \url{https://…}
+    \item Tutoriels vidéo : \url{https://…}
+    \item Accès à l’application : \url{https://…}
+\end{itemize}
+
+\subsection*{GeoNature}
+\begin{itemize}
+    \item Dépôt GitHub : \url{https://github.com/PnX-SI/GeoNature}
+    \item Documentation générale : \url{https://docs.geonature.fr/}
+    \item Guide de développement des modules externes : \url{https://docs.geonature.fr/development.html\#developper-un-module-externe}
+\end{itemize}
+
+\bigskip
+
+\noindent
+L’ensemble de ces éléments a permis de définir précisément le périmètre et les modalités du
+développement. Le chapitre suivant présente la réalisation concrète du module, depuis
+l’organisation du travail jusqu’aux phases de tests et de validation des fonctionnalités mises en
+place.
