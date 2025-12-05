@@ -1,0 +1,17 @@
+\noindent
+Le déroulement du stage a été marqué par un ensemble de contraintes techniques qui ont largement influencé 
+l’organisation du travail. L’absence d’une installation locale stable de GeoNature a constitué l’un des principaux obstacles : 
+les incompatibilités entre les versions de Debian, les erreurs liées au serveur applicatif et les difficultés rencontrées avec 
+Docker ont rendu nécessaire une approche alternative, centrée sur une instance de travail personnalisée. Cette situation a été 
+accentuée par les limitations du réseau de la DEAL, où la présence d’un proxy strict perturbait l’utilisation de nombreux outils 
+de développement. La mise en place d’un mécanisme dynamique de gestion du proxy a progressivement permis de stabiliser l’environnement.
+
+La migration des serveurs du SINP-974 vers un nouvel hébergeur a également retardé l’accès à un environnement de test réaliste. 
+Pendant plusieurs semaines, le développement a dû être poursuivi sans possibilité de déployer ou de tester directement sur 
+l’environnement cible. Une fois l’accès ouvert via une machine virtuelle bastion, les premières manipulations ont été freinées 
+par les restrictions imposées par l’outil d’accès à distance. L’usage de Git comme canal de transfert a alors été déterminant 
+pour poursuivre les tests et ajuster le module.
+
+Ces difficultés ont nécessité une grande capacité d’adaptation et ont conduit à affiner l’organisation du projet : clarification 
+des environnements, adoption d’outils de gestion de version adaptés, multiplication des tests exploratoires et documentation 
+progressive pour sécuriser les phases suivantes d’intégration.

@@ -129,11 +129,17 @@
   {\thesubsection.\ }{0.75em}{}
 \titlespacing*{\subsection}{0pt}{0.5em}{0.5em}
 
-
+    
 \usepackage[colorlinks=true,
             linkcolor=black,
             urlcolor=ENIBblue,
             citecolor=ENIBblue]{hyperref}
+
+\usepackage[normalem]{ulem} % pour \uline sans casser \emph
+
+\let\oldhref\href
+\renewcommand{\href}[2]{\oldhref{#1}{\uline{#2}}}
+
 
 % ------------------------------------------
 % TABLE DES MATIÈRES — BLEU
@@ -359,9 +365,14 @@
 % Travaux réalisés et compétences acquises
 % ------------------------------------------
 \chapter{Travaux réalisés et compétences acquises}
+\section{Travaux réalisés}
+\input{chapters/travaux_et_competences_acquises/travaux_realises}
+\section{Difficultés rencontrées et solutions apportées}
+\input{chapters/travaux_et_competences_acquises/difficultes_rencontrees}
+\section{Compétences acquises}
+\input{chapters/travaux_et_competences_acquises/competences_acquises}
 
-
-
+% ------------------------------------------  
 
 % ------------------------------------------
 % PERSPECTIVES ET CONCLUSION

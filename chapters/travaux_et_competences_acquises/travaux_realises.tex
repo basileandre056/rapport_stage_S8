@@ -1,0 +1,22 @@
+\noindent
+
+Les travaux réalisés au cours du stage se sont concentrés principalement sur le développement d’un module externe pour 
+GeoNature capable d’interagir avec le système d’information Quadrige. La première étape a consisté à concevoir 
+l’architecture du backend, fondée sur un blueprint Flask dédié, afin d’assurer l’authentification auprès de l’API,
+d’interroger les programmes disponibles et de structurer les données nécessaires à un futur import dans GeoNature.
+Une attention particulière a été portée à la construction des requêtes GraphQL, qui permettent de cibler précisément 
+les informations utiles tout en limitant le volume des échanges.
+
+Parallèlement, le développement du frontend a permis de proposer une première interface d’exploration des programmes 
+Quadrige directement dans GeoNature. Bien qu’encore partielle, cette interface constitue une base solide pour les 
+futures fonctionnalités de sélection, de filtrage et d’extraction. Ces travaux ont donné lieu à plusieurs phases de 
+tests, notamment via PyTest pour le backend et Cypress pour l’interface utilisateur, afin de valider les mécanismes 
+centraux avant leur intégration complète.
+
+En complément, un client Python interfaçant Pl@ntNet a été développé. Il permet d’interroger le service, de traiter 
+automatiquement les résultats et de structurer les informations selon un format exploitable. Ce travail préliminaire
+prépare une future extension de GeoNature vers de nouvelles sources d’acquisition de données naturalistes.
+
+Enfin, une documentation détaillée a été rédigée tout au long du projet. Elle décrit les procédures d’appel aux API, 
+les choix techniques effectués et les étapes nécessaires à l’installation ou à la maintenance du module. Ce travail de 
+capitalisation est essentiel pour permettre la reprise du projet par la DEAL ou ses partenaires.

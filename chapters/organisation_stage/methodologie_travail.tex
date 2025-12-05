@@ -1,0 +1,28 @@
+\noindent
+
+La méthodologie adoptée au cours du stage s’est construite progressivement, en fonction des contraintes techniques 
+rencontrées et de l’avancement du projet. Le développement a d’abord été mené en local, faute d’accès immédiat aux 
+serveurs du SINP-974. Cette situation a nécessité la mise en place d’un environnement de travail stable, capable de 
+reproduire autant que possible les conditions de production. La séparation stricte entre le backend Python/Flask et 
+le frontend Angular, conforme à l’architecture modulaire de GeoNature, a facilité cette organisation et permis de 
+développer chaque composante de manière indépendante puis intégrée.
+
+L’usage systématique de Git a constitué un élément central de la méthodologie. Il a permis de versionner les 
+évolutions, de tester les fonctionnalités étape par étape, puis de transférer les développements vers les serveurs 
+de la DEAL dès que l’accès a été ouvert. Ce mode de travail, fondé sur des allers-retours réguliers entre 
+l’environnement local et l’environnement distant, a offert une solution efficace pour contourner les limitations 
+imposées par la plateforme d’accès à distance utilisée au sein de l’administration.
+
+Parallèlement, une attention particulière a été portée à la configuration de l’environnement de développement. 
+Les contraintes liées au proxy ministériel et aux versions spécifiques des outils techniques (Python, Angular, Node)
+ont rendu nécessaire la mise en place d’un mécanisme permettant d’adapter automatiquement la configuration réseau 
+selon le contexte de connexion. L’utilisation de pyenv a également permis de stabiliser la version de Python utilisée, 
+élément indispensable pour assurer la compatibilité avec GeoNature.
+
+Enfin, l’ensemble du travail s’est appuyé sur une démarche itérative, combinant phases de développement, tests exploratoires 
+et documentation progressive. Les appels à l’API Quadrige ont d’abord été éprouvés par des tests unitaires avec un client Python local,
+avant d’être intégrés au module. De même, les premières interfaces Angular ont fait l’objet de tests fonctionnels 
+en local afin de vérifier la cohérence et la fluidité de l’ergonomie.
+
+Cette méthodologie, mêlant adaptation, rigueur technique et cycles courts d’expérimentation, a permis d’assurer la robustesse 
+du développement malgré un environnement parfois instable et d’anticiper au mieux les étapes d’intégration dans l’infrastructure du SINP-974.
