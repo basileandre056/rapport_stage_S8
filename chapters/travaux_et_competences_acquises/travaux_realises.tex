@@ -2,6 +2,48 @@
 
 Les travaux réalisés au cours du stage se sont concentrés principalement sur le développement d’un module externe pour 
 GeoNature capable d’interagir avec le système d’information Quadrige. La première étape a consisté à concevoir 
+un client python, pour tester l'envoi de requêtes GraphQL auprès de l’API Quadrige, la récupération des données, et l'autentification avec un token.
+
+
+Une fois les fonction d'interrogation terminées, je suis passé au developpement d'un prototype local du frontend angular.
+il se compose en quatre composants, program-list une liste de programmes extraits en fonction d'une localisation (par exemple "126-" en préfixe pour la Réunion). 
+C'est depuis ce composant principal qu'ont lieu les échanges backend/frontend.
+
+Le composant program-filter me permet de créer un filtre, avec une localisation, et le nom du filtre qu'on veut créer. Les critères de ce filtres 
+sont sauvegardés dans un fichier memory/last_filter.json.
+Ce filtre caractérise les critères selon lesquels ont extrait les programmes. La fonction Graphql utilisée est executeProgramExtraction, 
+et possède beaucoups plus de paramètres optionnels, mais dont nous n'avons pas à nous préocupper, car l'objectif est d'extraire chaque programme 
+de relevé de données qui a au moins une instance dans la zone spécifiée par le filtre. 
+
+Un autre bouton extraire les programmes appelle ma fonction d'extraction, qui envoie la requête GraphQL à l'API Quadrige, 
+et récupère les programmes choicis selonle filtre.
+Un message de suivi de l'exraction affiche l'état de la requête, extraction en cours,, programmes extraits :, et en cas d'erreur, 
+un message d'erreur différent en fonction des cas s'ffiche.
+
+Une fois l'extraction terminée, on récupère un fichier csv stocké dans memory/csv_brut_suffixe lié au filtre d'extraction", qui contient toutes les instances de chaque programme dont au moins une instance est dans la zone du filtre. Le problème c'est que dans ce csv, j'obtiens alors toutes les instances de ce programme, même celles qui n'ont pas lieu à la réunion. Je filtre donc ce csv brut, pour supprimer toutes les lignes dont la localisation n'est pas celle souhaitée, et je ne garde que les champs principaux que j'affiche dans mon composant-program-list. 
+
+Car par la suite, kje n'ai besoin que du code du programme pour extraire les données que je cherche.
+
+
+Une fois l'extraction des programmes terminée, ils sont affichés dans le composant program-list, qui liste les programmes extraits, avec leur nom, 
+date de début et de fin, le(s) responsable(s),
+
+Ensuite on peut choisir les programme que l'on séléctionne, grâce à une barre de recherche, et de cases cochables à côté de chaque programmes, 
+ainsi que d'une option "tout cocher" en haut de la colonne de cases a cocher.
+
+Un composant data-filter permet de filtrer les données des programmes sélectionnés, en fonction de différents critères, comme les dates de début et de fin, 
+la localisation du dernier filtre est récupérée et directement insérée dans 
+
+
+
+
+Le composant 
+
+
+
+
+
+
 l’architecture du backend, fondée sur un blueprint Flask dédié, afin d’assurer l’authentification auprès de l’API,
 d’interroger les programmes disponibles et de structurer les données nécessaires à un futur import dans GeoNature.
 Une attention particulière a été portée à la construction des requêtes GraphQL, qui permettent de cibler précisément 
