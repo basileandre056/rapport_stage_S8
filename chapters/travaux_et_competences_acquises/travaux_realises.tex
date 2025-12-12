@@ -48,9 +48,38 @@ fonctionnalités de sélection, de filtrage et d’extraction. Ces travaux ont d
 notamment via PyTest pour le backend et Cypress pour l’interface utilisateur, afin de valider les mécanismes centraux 
 avant leur intégration complète.
 
-En complément, un client Python interfaçant Pl@ntNet a été développé. Il permet d’interroger le service, de traiter 
-automatiquement les résultats et de structurer les informations dans un format exploitable. Ce travail prépare une future 
-extension de GeoNature vers de nouvelles sources d’acquisition de données naturalistes.
+\paragraph{Travaux parallèles sur l’intégration de Pl@ntNet}
+
+En parallèle du développement principal consacré à Quadrige, j’ai également initié un travail structurant autour de l’intégration des données \gls{plantnet} dans GeoNature. 
+L’objectif était double~: d'une part valider la possibilité technique d’interroger l’API Pl@ntNet depuis un service Python, et d'autre part poser les bases d’un parseur Darwin Core utilisable par un module GeoNature, selon une logique similaire à celle mise en place pour Quadrige.
+
+Pour cela, j’ai développé un client Python générique capable de~:
+\begin{itemize}
+    \item envoyer des requêtes POST vers l’endpoint \texttt{dwc/occurrence/search} de l’API Pl@ntNet~;
+    \item gérer dynamiquement les paramètres taxonomiques, spatiaux (bbox ou polygone GeoJSON) et temporels~;
+    \item enregistrer les réponses brutes au format JSON~;
+    \item transformer ces réponses en un CSV conforme au standard Darwin Core (DwC), en s’appuyant sur des fichiers de configuration modulaires.
+\end{itemize}
+
+Une attention particulière a été portée à la normalisation des données~:
+\begin{itemize}
+    \item homogénéisation des dates au format ISO-8601~;
+    \item nettoyage et standardisation des coordonnées ainsi que du datum géodésique~;
+    \item génération d’identifiants stables (\texttt{occurrenceID})~;
+    \item mappage des vocabulaires Pl@ntNet vers ceux utilisés dans GBIF (\texttt{basisOfRecord})~;
+    \item sérialisation propre des champs complexes (listes, objets JSON).
+\end{itemize}
+
+Ce travail a conduit à la mise en place d’un pipeline complet :
+
+\[
+\text{API} \;\rightarrow\; \text{JSON brut} \;\rightarrow\; \text{CSV Darwin Core normalisé}
+\]
+
+entièrement automatisé et adaptable à d’autres territoires ou taxons via un simple fichier de configuration.
+
+Ce client constitue aujourd’hui la base technique du parser Pl@ntNet destiné au module \texttt{api2gn}, dont l’intégration a nécessité plusieurs ajustements dans les migrations SQL et dans la structure interne du module.
+
 
 Enfin, une documentation détaillée a été rédigée tout au long du projet. Elle décrit les procédures d’appel aux API, 
 les choix techniques effectués ainsi que les étapes d’installation et de maintenance du module. Ce travail de 

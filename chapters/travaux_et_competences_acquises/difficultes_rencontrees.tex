@@ -15,3 +15,15 @@ pour poursuivre les tests et ajuster le module.
 Ces difficultés ont nécessité une grande capacité d’adaptation et ont conduit à affiner l’organisation du projet : clarification 
 des environnements, adoption d’outils de gestion de version adaptés, multiplication des tests exploratoires et documentation 
 progressive pour sécuriser les phases suivantes d’intégration.
+
+
+\paragraph{Difficultés spécifiques au travail sur Pl@ntNet}
+
+Le développement du client Pl@ntNet a également présenté plusieurs défis techniques. 
+L’API renvoie une structure JSON très hétérogène selon les taxons, les médias associés ou les métadonnées disponibles, ce qui a nécessité la création d’un parseur flexible, capable d’absorber des variations importantes de schéma sans échouer.
+
+Par ailleurs, le standard Darwin Core impose un modèle strict qui ne correspond pas directement aux champs fournis par Pl@ntNet. 
+Il a donc fallu définir un mapping robuste et configurable pour garantir la compatibilité avec GeoNature et Borbonica.
+
+Enfin, l’intégration du parser dans le module \texttt{api2gn} a nécessité de modifier certaines migrations SQL existantes, qui empêchaient l’installation correcte du module. 
+Ces ajustements feront l’objet d’un retour formalisé aux développeurs officiels de GeoNature afin d’améliorer la compatibilité du module avec des sources de données externes diversifiées.

@@ -15,11 +15,20 @@ Dans ce cadre, plusieurs objectifs spécifiques ont été définis :
     \item poser les fondations techniques nécessaires à une future intégration des données produites par l’application 
         \gls{plantnet}, en réalisant un client Python et un premier outil de structuration des résultats ;
 
-
     \item documenter les procédures d’appel aux API et proposer une organisation des développements garantissant 
     leur maintenabilité et leur évolution dans le temps.
 
 \end{itemize}
+
+En complément du module Quadrige, une seconde orientation du stage concernait la préparation d’un futur connecteur GeoNature dédié aux données issues de \gls{plantnet}. 
+Pl@ntNet produit chaque jour un volume important d’observations naturalistes géolocalisées, particulièrement pertinent pour le suivi des \gls{eee} végétales et des dynamiques de végétation.
+Afin d’explorer la faisabilité de cette intégration, un travail préliminaire a consisté à :
+\begin{itemize}
+    \item étudier la documentation de l’API Pl@ntNet v3,
+    \item concevoir un client Python robuste, capable d’interroger l’API selon plusieurs critères (taxon, polygone GeoJSON, plage temporelle),
+    \item structurer les données extraites au format \textit{Darwin Core} afin d’assurer une compatibilité immédiate avec GeoNature et le SINP-974.
+\end{itemize}
+Ce travail prépare le développement d’un parser complet destiné au module \texttt{api2gn} de GeoNature.
 
 Ces objectifs s’inscrivent pleinement dans la stratégie portée conjointement par la \gls{deal} Réunion et 
 le \gls{pnrun}, visant à fiabiliser et à harmoniser les données du SINP-974 tout en renforçant la 
