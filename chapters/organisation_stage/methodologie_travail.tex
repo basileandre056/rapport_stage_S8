@@ -1,28 +1,63 @@
 \noindent
 
-La méthodologie adoptée au cours du stage s’est construite progressivement, en fonction des contraintes techniques 
-rencontrées et de l’avancement du projet. Le développement a d’abord été mené en local, faute d’accès immédiat aux 
-serveurs du SINP-974. Cette situation a nécessité la mise en place d’un environnement de travail stable, capable de 
-reproduire autant que possible les conditions de production. La séparation stricte entre le backend Python/Flask et 
-le frontend Angular, conforme à l’architecture modulaire de GeoNature, a facilité cette organisation et permis de 
-développer chaque composante de manière indépendante puis intégrée.
+La méthodologie adoptée au cours du stage s’est construite de manière progressive et pragmatique. 
+Elle a été définie en tenant compte des contraintes techniques du projet, du cadre institutionnel de la DEAL 
+et de l’organisation particulière de l’équipe. Le projet étant mené uniquement à deux personnes — mon maître de stage, 
+Rémi Bouilly, et moi-même — il n’était pas pertinent de mettre en place une méthodologie formelle lourde. Le cadre de travail 
+retenu s’inspire néanmoins des principes des méthodes agiles, tout en restant volontairement souple.
 
-L’usage systématique de Git a constitué un élément central de la méthodologie. Il a permis de versionner les 
-évolutions, de tester les fonctionnalités étape par étape, puis de transférer les développements vers les serveurs 
-de la DEAL dès que l’accès a été ouvert. Ce mode de travail, fondé sur des allers-retours réguliers entre 
-l’environnement local et l’environnement distant, a offert une solution efficace pour contourner les limitations 
-imposées par la plateforme d’accès à distance utilisée au sein de l’administration.
+Le développement du module Quadrige et des outils associés a ainsi été conduit selon une démarche itérative et incrémentale. 
+Le travail était organisé en cycles courts, assimilables à des sprints d’une durée moyenne d’environ une semaine. Chaque sprint 
+correspondait à un ensemble cohérent de fonctionnalités, définies en amont, puis développées, testées et ajustées avant d’engager 
+le cycle suivant. Cette organisation permettait d’obtenir régulièrement des résultats fonctionnels, même partiels, tout en 
+identifiant rapidement les difficultés techniques ou fonctionnelles.
 
-Parallèlement, une attention particulière a été portée à la configuration de l’environnement de développement. 
-Les contraintes liées au proxy ministériel et aux versions spécifiques des outils techniques (Python, Angular, Node)
-ont rendu nécessaire la mise en place d’un mécanisme permettant d’adapter automatiquement la configuration réseau 
-selon le contexte de connexion. L’utilisation de pyenv a également permis de stabiliser la version de Python utilisée, 
-élément indispensable pour assurer la compatibilité avec GeoNature.
+Dans ce contexte de travail en effectif réduit, il n’était ni nécessaire ni utile de mettre en place des rituels agiles classiques 
+tels que les daily meetings ou les revues de sprint formelles. En revanche, des points réguliers étaient organisés une à deux fois 
+par semaine avec mon maître de stage. Ces échanges permettaient de faire un état d’avancement, de valider les choix techniques effectués 
+et d’ajuster les priorités à court terme en fonction des besoins métier. Ils ont joué un rôle central dans le bon déroulement du projet, 
+en assurant une compréhension partagée des objectifs tout en me laissant une large autonomie dans la mise en œuvre.
 
-Enfin, l’ensemble du travail s’est appuyé sur une démarche itérative, combinant phases de développement, tests exploratoires 
-et documentation progressive. Les appels à l’API Quadrige ont d’abord été éprouvés par des tests unitaires avec un client Python local,
-avant d’être intégrés au module. De même, les premières interfaces Angular ont fait l’objet de tests fonctionnels 
-en local afin de vérifier la cohérence et la fluidité de l’ergonomie.
+Le cadrage initial du stage s’est appuyé sur deux cahiers des charges distincts, fournis par mon maître de stage. Le premier concernait 
+le développement du module externe GeoNature interfacé avec Quadrige, tandis que le second portait sur la conception d’un parser dédié 
+aux données issues de Pl@ntNet et à leur structuration au format Darwin Core. Ces documents définissaient le périmètre fonctionnel 
+attendu, les principales contraintes techniques ainsi que les livrables envisagés. Ils ont servi de fil conducteur tout au long du 
+stage, tout en restant suffisamment flexibles pour intégrer des ajustements liés aux contraintes rencontrées ou à l’évolution du projet.
 
-Cette méthodologie, mêlant adaptation, rigueur technique et cycles courts d’expérimentation, a permis d’assurer la robustesse 
-du développement malgré un environnement parfois instable et d’anticiper au mieux les étapes d’intégration dans l’infrastructure du SINP-974.
+
+\item \href{A fournir !!!}{Cahier des charges module Quadrige}
+\item \href{A fournir !!!}{Cahier des charges module Plantnet}
+
+
+Afin de suivre l’avancement global du projet et de visualiser les grandes phases du stage, un diagramme de Gantt a été utilisé. 
+Il a permis de planifier les principales étapes, depuis la prise en main de l’environnement GeoNature jusqu’aux phases de tests, 
+de documentation et de préparation des livrables. Cet outil offrait une vision synthétique du projet et facilitait l’anticipation 
+des périodes plus sensibles, notamment lors des phases de migration des serveurs ou d’attente d’accès aux environnements distants.
+
+À un niveau plus opérationnel, le travail quotidien était organisé sous forme de tâches unitaires, réparties selon un statut simple : 
+à faire, en cours ou terminées. Cette organisation, inspirée des tableaux de type Kanban, permettait de visualiser rapidement l’état 
+d’avancement, de prioriser les actions et de conserver une trace claire du travail réalisé. Elle s’est révélée particulièrement adaptée 
+à un projet individuel encadré, en apportant une structure légère sans alourdir inutilement le processus.
+
+La gestion du code source reposait intégralement sur l’utilisation de Git. L’ensemble des développements a été versionné dès les 
+premières phases du projet, aussi bien pour le module Quadrige que pour les outils liés à Pl@ntNet. Les évolutions étaient enregistrées 
+de manière régulière, avec des messages de commit explicites. Cette pratique a permis de sécuriser les développements, de tester différentes 
+approches sans risque de perte de code et de faciliter le transfert vers les serveurs de la DEAL une fois l’accès ouvert. Dans un contexte 
+où l’accès aux environnements distants était limité et parfois instable, Git a également servi de principal moyen de synchronisation entre 
+l’environnement local et l’environnement distant.
+
+Le développement a d’abord été mené intégralement en local, en l’absence d’un accès immédiat aux serveurs du SINP-974. Cette situation 
+a nécessité la mise en place d’un environnement de travail stable, capable de reproduire au mieux les conditions de production. La séparation 
+stricte entre le backend Python/Flask et le frontend Angular, conforme à l’architecture modulaire de GeoNature, a facilité cette 
+organisation et permis de développer chaque composante de manière indépendante.
+
+Les contraintes liées au proxy ministériel et aux versions spécifiques des outils techniques ont également nécessité une attention 
+particulière à la configuration de l’environnement. L’utilisation de pyenv a permis de stabiliser la version de Python utilisée, condition indispensable pour garantir la compatibilité avec GeoNature et ses dépendances.
+
+Enfin, l’ensemble du travail s’est appuyé sur une démarche de validation progressive. Les appels à l’API Quadrige ont d’abord été testés 
+à l’aide de scripts Python indépendants, avant leur intégration dans le module GeoNature. De la même manière, les premières interfaces 
+Angular ont été testées en local afin de vérifier leur cohérence fonctionnelle et leur ergonomie avant toute intégration plus large.
+
+Cette méthodologie, mêlant principes agiles, rigueur technique et adaptation constante au contexte, a permis d’assurer la 
+robustesse des développements malgré un environnement parfois contraint. Elle a également facilité l’anticipation des étapes 
+futures d’intégration et de reprise du projet par la DEAL ou ses partenaires.
