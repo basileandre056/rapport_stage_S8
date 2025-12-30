@@ -1,0 +1,68 @@
+
+Le module d’import \gls{quadrige} développé durant le stage constitue une première brique 
+fonctionnelle permettant d’explorer, d’extraire et de préparer des données marines issues du 
+système d’information \gls{quadrige}. Plusieurs axes d’amélioration peuvent être envisagés afin 
+d’en accroître la maturité et de faciliter son intégration opérationnelle à long terme.
+
+
+\subsection{Amélioration de l’ergonomie et de l’intégration visuelle}
+
+Une première évolution concernerait l’intégration visuelle du module au sein de l’interface 
+GeoNature. L’ajout d’un pictogramme dédié dans la barre de navigation ou dans la liste des modules 
+permettrait d’identifier plus clairement le module \gls{quadrige} parmi les autres extensions 
+disponibles.
+
+Ce pictogramme contribuerait à améliorer l’expérience utilisateur en rendant le module plus 
+visible et plus intuitif pour les administrateurs amenés à l’utiliser ponctuellement. Il 
+faciliterait également son appropriation par de nouveaux utilisateurs, notamment dans un 
+contexte de reprise du projet ou de déploiement sur d’autres territoires.
+
+
+\subsection{Génération directe de fichiers au format GeoNature}
+
+À l’heure actuelle, le module produit des fichiers intermédiaires (CSV bruts, CSV filtrés, 
+fichiers JSON de paramètres) destinés à être analysés et, le cas échéant, retravaillés avant 
+import dans GeoNature. Cette approche garantit une forte traçabilité, mais implique encore une 
+étape manuelle avant l’intégration finale.
+
+Une évolution naturelle du module consisterait à ajouter une étape optionnelle de transformation 
+automatique des données extraites vers un format directement compatible avec les mécanismes 
+d’import de GeoNature. Cette étape pourrait s’appuyer sur le schéma de synthèse et sur les règles 
+existantes des modules d’import afin de produire un fichier immédiatement prêt à être injecté 
+dans le système.
+
+Cette fonctionnalité pourrait être activée de manière conditionnelle, laissant le choix à 
+l’administrateur entre une extraction préparatoire avec contrôle manuel ou une extraction 
+complète incluant la génération d’un fichier directement importable.
+
+
+\subsection{Centralisation de la configuration côté backend}
+
+Au cours du développement, certaines difficultés ont été identifiées dans la gestion de la 
+configuration du module, notamment concernant les localisations proposées lors du filtrage des 
+programmes et les champs disponibles pour l’extraction. Une partie de ces paramètres est 
+actuellement définie directement dans le frontend Angular, ce qui limite la flexibilité du 
+module et complique son évolution.
+
+Une perspective importante consisterait à centraliser l’ensemble de ces paramètres dans un 
+fichier de configuration côté backend. Le module expose déjà un endpoint permettant d’accéder 
+au contenu de ce fichier, mais son exploitation n’a pas pu être finalisée durant le stage par 
+manque de temps.
+
+Une refonte partielle du frontend permettrait ainsi de charger dynamiquement les localisations 
+disponibles et les champs d’extraction depuis le backend, d’éviter les valeurs codées en dur dans 
+l’interface et de faciliter l’adaptation du module à d’autres territoires sans modification du 
+code frontend. Cette approche renforcerait la maintenabilité globale du module et réduirait les 
+risques d’incohérence entre backend et frontend.
+
+\subsection{Vers une automatisation partielle des imports}
+
+
+À plus long terme, le module pourrait évoluer vers une automatisation partielle ou contrôlée des 
+imports, par exemple via des imports périodiques planifiés, des imports incrémentaux basés sur 
+les dates de mise à jour des données, ou des déclenchements manuels avec validation préalable.
+
+De telles évolutions nécessiteraient toutefois une réflexion approfondie sur la gestion des 
+doublons, la validation scientifique des données et la traçabilité des mises à jour, afin de 
+rester cohérentes avec les exigences du \gls{sinp} et les pratiques de contrôle des données 
+naturalistes.

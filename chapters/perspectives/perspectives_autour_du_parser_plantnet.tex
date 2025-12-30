@@ -1,0 +1,47 @@
+
+
+
+
+Les travaux menés sur l’intégration des données \gls{plantnet} ont permis de valider la 
+faisabilité technique d’un pipeline complet, depuis l’interrogation de l’\gls{api} jusqu’à la 
+production de fichiers conformes au standard Darwin Core. Toutefois, le parser développé 
+repose actuellement sur des fichiers de configuration manipulés côté backend.
+
+
+\subsection{Ajout d’une interface d’administration dédiée}
+
+Une perspective majeure consisterait à proposer une interface frontend permettant aux 
+administrateurs de paramétrer le parser \gls{plantnet} sans recourir à la modification de 
+fichiers de configuration. Cette interface pourrait offrir la possibilité de définir les taxons 
+ciblés, les périmètres géographiques (boîtes englobantes ou polygones), les plages temporelles, 
+ainsi que les paramètres de normalisation et de filtrage.
+
+Une telle évolution améliorerait significativement l’ergonomie du dispositif et faciliterait 
+son utilisation par des profils non techniques. Elle permettrait également d’harmoniser 
+l’expérience utilisateur avec celle du module \gls{quadrige}, en proposant une logique 
+d’interaction cohérente au sein de GeoNature.
+
+
+\subsection{Contraintes liées au module api2gn}
+
+Dans l’état actuel, cette évolution n’est toutefois pas immédiatement réalisable. Le module 
+\texttt{api2gn} est un module officiel de GeoNature, dont l’architecture n’a pas été conçue à 
+l’origine pour intégrer des interfaces frontend spécifiques à chaque source de données.
+
+Toute extension de ce type nécessiterait soit une évolution structurelle du module \texttt{api2gn} 
+lui-même, soit la création d’un module externe complémentaire venant piloter le parser 
+\gls{plantnet}. Cette réflexion dépasse le cadre du stage, mais les travaux réalisés constituent 
+une base technique solide pour initier ce type d’évolution à l’avenir.
+
+
+\subsection{Vers une intégration renforcée des données participatives}
+
+
+À plus long terme, l’intégration des données issues de \gls{plantnet} dans GeoNature pourrait 
+contribuer à enrichir significativement les données naturalistes disponibles, en particulier 
+pour le suivi des espèces exotiques envahissantes végétales.
+
+L’automatisation du pipeline \gls{api} → Darwin Core → GeoNature, couplée à des mécanismes de 
+filtrage et de validation adaptés, offrirait un levier intéressant pour exploiter des volumes 
+importants de données participatives tout en respectant les exigences de qualité et de 
+traçabilité du \gls{sinp}.

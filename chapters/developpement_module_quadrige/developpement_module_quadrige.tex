@@ -1,29 +1,72 @@
 \section{Contexte du projet}
 
-Le \gls{sinp}, déployé à La Réunion au sein de l’application Borbonica, comporte encore très peu de
-données issues du milieu marin : selon le bilan 2024, moins de 10~\% des observations concernent
-des taxons marins. Cette sous-représentation constitue un frein à la connaissance de la
-biodiversité littorale et sous-marine de l’île.  
+Le \gls{sinp}, déployé à La Réunion à travers la plateforme Borbonica, constitue le dispositif régional de référence pour la centralisation, 
+la gestion et la diffusion des données naturalistes. Depuis sa mise en service, il a permis de structurer et de valoriser un volume important 
+d’observations, issues de sources multiples et couvrant un large éventail de taxons.
 
-À l’inverse, le système d’information \href{https://quadrige-app.ifremer.fr/}{\gls{quadrige}}, maintenu par l’Ifremer, rassemble un volume
-considérable de données environnementales et biologiques collectées en mer. La mise en place,
-fin 2024, d’une nouvelle API GraphQL rend désormais possible l’interrogation directe et
-structurée de ces données, ouvrant la voie à une intégration plus large dans les outils du \gls{sinp}.
+La dynamique de peuplement de la base reflète toutefois les modalités historiques et opérationnelles de production des données 
+naturalistes sur le territoire. Les observations actuellement intégrées concernent majoritairement les milieux terrestres et 
+dulçaquicoles, qui bénéficient de réseaux d’acteurs structurés, de protocoles d’acquisition largement diffusés et d’outils de 
+saisie directement compatibles avec le SINP.
 
-Dans ce contexte, le projet a consisté à développer un \href{https://docs.geonature.fr/development.html\#developper-un-module-externe} {\textbf{module externe GeoNature}} capable
-d’interroger l'API de Quadrige, de récupérer les programmes pertinents pour La Réunion, d’en
-extraire les observations utiles, puis de produire un fichier d’import conforme aux spécifications
-du modèle \gls{sinp}. Le module devait s’intégrer naturellement à l’interface existante de GeoNature,
-offrir une exploration intuitive des programmes Quadrige, et préparer les données en vue de leur
-intégration finale dans Borbonica.  
-Ce développement s’inscrit ainsi dans la dynamique d’amélioration continue du \gls{sinp} Réunion et
-vise à renforcer la représentativité des données marines dans la base régionale.
+À l’inverse, les données issues du milieu marin demeurent plus faiblement représentées. Les indicateurs de contenu disponibles 
+en 2024 montrent que les observations relatives aux taxons marins ne constituent qu’une part marginale des données référencées. 
+Cette situation ne traduit pas une absence de connaissances ou de suivis en milieu marin, mais résulte principalement de la 
+complexité des chaînes d’acquisition, de structuration et de diffusion propres aux données marines, historiquement gérées au sein 
+de systèmes d’information spécialisés.
+
+Dans ce contexte, l’enjeu principal n’était pas de refondre les outils existants, mais de renforcer progressivement la représentation 
+des données marines au sein du \gls{sinp}, en s’appuyant sur des sources de données déjà structurées, pérennes et reconnues 
+institutionnellement. Parmi celles-ci, le système d’information \gls{quadrige}, maintenu par l’Ifremer, occupe une place centrale. 
+\gls{quadrige} regroupe un volume important de données environnementales et biologiques collectées en milieu marin, issues de programmes 
+de surveillance, d’observation et de recherche conduits sur le long terme.
+
+L’ouverture récente d’une \gls{api} GraphQL par l’Ifremer constitue à ce titre une évolution majeure. Elle permet une interrogation 
+directe, fine et structurée des données de \gls{quadrige}, en ciblant précisément les programmes, les zones géographiques, les périodes 
+temporelles et les types d’observations d’intérêt. Cette évolution ouvre la voie à une exploitation plus systématique de ces données 
+par des acteurs institutionnels tels que la DEAL, et à leur mobilisation progressive dans le cadre du \gls{sinp}.
+
+C’est dans ce cadre que s’inscrit le projet développé durant le stage. L’objectif n’était pas de réaliser une intégration 
+directe et entièrement automatisée des données \gls{quadrige} dans la base GeoNature, mais de concevoir un module externe permettant 
+d’explorer, d’extraire et de préparer ces données de manière structurée, traçable et reproductible. Le module développé interroge 
+l’\gls{api} \gls{quadrige} afin d’identifier les programmes pertinents pour le territoire réunionnais, puis permet d’en extraire les observations 
+associées selon des critères définis par l’utilisateur.
+
+Les résultats de ces extractions ne prennent pas la forme de fichiers immédiatement importables dans GeoNature. 
+Pour chaque programme sélectionné, le module génère une archive compressée contenant plusieurs éléments complémentaires : 
+un fichier CSV brut correspondant aux données extraites, un fichier JSON décrivant précisément les filtres appliqués lors 
+de l’appel à l’\gls{api}, ainsi qu’un fichier README documentant le déroulement de l’export et les éventuelles anomalies rencontrées. 
+Le module conserve également un accès aux trois derniers exports réalisés afin d’en faciliter la consultation et la réutilisation.
+
+En complément de ces archives, le module expose également des liens directs vers les fichiers CSV générés lors de la phase d’extraction 
+des programmes. Deux niveaux de fichiers sont distingués :
+– un CSV brut issu directement de la réponse de l’\gls{api} \gls{quadrige}, contenant l’ensemble des instances des programmes dont au moins une 
+occurrence est localisée sur le territoire ciblé ;
+– un CSV filtré géographiquement, obtenu par un traitement a posteriori à l’aide de la bibliothèque pandas, permettant d’exclure 
+les instances dont le code de monitoring location ne correspond pas au territoire d’intérêt (par exemple, codes ne commençant pas 
+par le préfixe « 126- » pour La Réunion).
+
+Ce filtrage complémentaire est nécessaire car, lors de l’extraction des programmes, la requête adressée à l’\gls{api} \gls{quadrige} sélectionne 
+l’ensemble des programmes possédant au moins une instance sur le territoire demandé, mais retourne également les autres instances associées 
+à ces programmes, y compris celles situées hors du périmètre géographique ciblé.
+
+Cette approche intermédiaire répond à plusieurs objectifs. Elle garantit d’une part la traçabilité complète des extractions réalisées 
+depuis \gls{quadrige}, en conservant une description explicite des paramètres et traitements appliqués. Elle offre d’autre part une souplesse 
+d’usage, en laissant aux administrateurs et gestionnaires de données la possibilité de contrôler, d’analyser et, le cas échéant, d’adapter 
+les fichiers produits avant toute intégration dans GeoNature ou Borbonica. Le module s’inscrit ainsi comme une brique préparatoire, destinée 
+à sécuriser et à faciliter l’intégration future des données marines dans le \gls{sinp}.
+
+Ce développement s’inscrit pleinement dans la dynamique d’amélioration continue portée par la DEAL Réunion et ses partenaires. 
+Il vise à renforcer progressivement la place des données issues du milieu marin au sein du système régional, tout en respectant 
+les contraintes techniques, méthodologiques et organisationnelles propres aux outils existants.
+
+
 
 \section{Périmètre fonctionnel}
 
 Le module d’import devait couvrir l’ensemble de la chaîne d’acquisition : de la découverte des
-programmes Quadrige jusqu’à la production d’un fichier structuré pour GeoNature.  
-La première étape consistait à interroger l’API en mode authentifié afin d’obtenir la liste des
+programmes \gls{quadrige} jusqu’à la production d’un fichier structuré pour GeoNature.  
+La première étape consistait à interroger l’\gls{api} en mode authentifié afin d’obtenir la liste des
 programmes disponibles pour un utilisateur donné. Un filtrage automatique sur un périmètre
 géographique — principalement La Réunion, mais extensible à d’autres territoires comme les Îles
 Éparses — permettait d’isoler les programmes pertinents. Une interface dédiée intégrée à
@@ -32,8 +75,8 @@ mots-clés et de sélectionner ceux à importer.
 
 Une fois les programmes choisis, l’utilisateur pouvait définir les filtres à appliquer aux données
 (la période d'intérêt, les champs souhaités, ou encore la reprise des stations déjà extraites).  
-Le module interrogeait alors \href{https://quadrige-core.ifremer.fr/api/extraction/doc?doc=standard&lang=fr&name=result&type=standard}{l’API \gls{quadrige}}
-pour récupérer les observations correspondantes \href{https://quadrige.ifremer.fr/support/Mes-donnees/J-extrais-mes-donnees/J-interroge-l-API-pour-extraire-mes-donnees/Je-regarde-des-videos-de-demo-sur-l-API}{Tutoriels vidéo}.
+Le module interrogeait alors \href{https://\gls{quadrige}-core.ifremer.fr/\gls{api}/extraction/doc?doc=standard&lang=fr&name=result&type=standard}{l’\gls{api} \gls{quadrige}}
+pour récupérer les observations correspondantes \href{https://\gls{quadrige}.ifremer.fr/support/Mes-donnees/J-extrais-mes-donnees/J-interroge-l-\gls{api}-pour-extraire-mes-donnees/Je-regarde-des-videos-de-demo-sur-l-\gls{api}}{Tutoriels vidéo}.
 Seuls les champs utiles au modèle \gls{sinp} étaient extraits : identifiants des programmes et stations,
 localisation géographique, taxon observé, date, ainsi que les métadonnées essentielles (auteur,
 organisme, méthode d’acquisition, etc.). Une transformation était appliquée pour obtenir une
@@ -51,26 +94,31 @@ Techniquement, le module repose sur une architecture conforme à celle de
 \href{https://docs.geonature.fr/}{\gls{geonature}}, dont le code source est accessible sur son 
 \href{https://github.com/PnX-SI/GeoNature}{dépôt GitHub}. Le
 \textbf{backend}, développé en Python avec le framework Flask, se charge de communiquer avec
-l’API Quadrige, d’effectuer les transformations nécessaires sur les données et de générer les
+l’\gls{api} \gls{quadrige}, d’effectuer les transformations nécessaires sur les données et de générer les
 fichiers d’export. Le \textbf{frontend}, construit en Angular et Bootstrap, s’intègre à l’interface
 existante de GeoNature et fournit les pages de sélection des programmes ainsi que l’historique
 des imports.
 
-Les échanges avec Quadrige reposent sur l’API GraphQL récemment mise en place par l’Ifremer, 
+Les échanges avec \gls{quadrige} reposent sur l’\gls{api} GraphQL récemment mise en place par l’Ifremer, 
 permettant de sélectionner précisément les champs nécessaires et de limiter le volume des données transférées. 
 L’authentification s’appuie sur un token fourni par l’Ifremer et configurable directement dans les paramètres du module. 
-Les autres réglages comprennent l’URL de l’API, le périmètre
-géographique par défaut, ainsi que le mapping entre les champs Quadrige et les champs
+Les autres réglages comprennent l’URL de l’\gls{api}, le périmètre
+géographique par défaut, ainsi que le mapping entre les champs \gls{quadrige} et les champs
 attendus par le schéma de synthèse de GeoNature.
 
 Un soin particulier a été apporté à la gestion des erreurs : vérification des réponses HTTP,
 détection des timeouts, contrôle de la validité des données, et affichage de messages explicites à
-l’utilisateur. Toutes les actions — appels API, transformations, exports — sont consignées dans les
+l’utilisateur. Toutes les actions — appels \gls{api}, transformations, exports — sont consignées dans les
 logs du module, conformément aux pratiques de GeoNature.
+
+Le module ne se limite pas à la production de fichiers destinés à un import ultérieur. 
+Il met également à disposition de l’utilisateur les résultats intermédiaires de l’extraction des programmes \gls{quadrige}, 
+sous forme de fichiers CSV consultables. Ces exports intermédiaires visent à faciliter la compréhension du périmètre 
+réellement couvert par chaque programme et à permettre un contrôle visuel préalable avant toute extraction de données détaillées.
 
 \section{Contraintes, dépendances et livrables}
 
-La réussite du projet dépendait principalement de l’accessibilité de l’API Quadrige, de la
+La réussite du projet dépendait principalement de l’accessibilité de l’\gls{api} \gls{quadrige}, de la
 stabilité de ses services, et de la disponibilité d’une documentation actualisée. L’intégration dans
 GeoNature nécessitait également de respecter la structure modulaire du noyau applicatif et les
 contraintes du modèle \gls{sinp}.

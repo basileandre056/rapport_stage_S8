@@ -1,8 +1,8 @@
 \noindent
 
 Les travaux réalisés au cours du stage se sont concentrés principalement sur le développement d’un module externe pour 
-GeoNature, capable d’interagir avec le système d’information Quadrige. La première étape a consisté à concevoir 
-un client Python permettant de tester l’envoi de requêtes GraphQL auprès de l’API Quadrige, de récupérer les données 
+GeoNature, capable d’interagir avec le système d’information \gls{quadrige}. La première étape a consisté à concevoir 
+un client Python permettant de tester l’envoi de requêtes GraphQL auprès de l’\gls{api} \gls{quadrige}, de récupérer les données 
 et de gérer l’authentification via un jeton.
 
 Une fois les fonctions d’interrogation terminées, je suis passé au développement d’un prototype local du frontend Angular.
@@ -16,15 +16,24 @@ Ce filtre sert à extraire les programmes selon des règles bien définies. La r
 \texttt{executeProgramExtraction}, qui comporte de nombreux paramètres optionnels, mais dont seuls ceux relatifs à la 
 localisation nous intéressent. L’objectif est d’extraire tout programme comportant au moins une instance dans la zone spécifiée.
 
-Un bouton «~Extraire les programmes~» déclenche la fonction d’extraction, qui envoie la requête GraphQL à Quadrige 
+Un bouton «~Extraire les programmes~» déclenche la fonction d’extraction, qui envoie la requête GraphQL à \gls{quadrige} 
 et récupère les programmes correspondant au filtre. Un message d’état informe l’utilisateur de l’avancement 
 («~extraction en cours~», «~programmes extraits~») et, en cas d’erreur, un message approprié s’affiche.
 
 Lorsque l’extraction est terminée, un fichier CSV est produit et stocké dans \texttt{memory/csv\_brut\_suffixe}, 
 associé au filtre utilisé. Il contient toutes les instances des programmes ayant au moins une occurrence dans la zone filtrée. 
-Cependant, ce fichier inclut aussi les instances situées hors de La Réunion. J’ai donc ajouté un filtrage supplémentaire pour 
-ne conserver que les lignes correspondant à la localisation souhaitée, ainsi que les champs pertinents affichés dans 
-le composant \texttt{program-list}.
+
+
+Le fichier CSV généré à l’issue de cette première extraction contient l’ensemble des instances associées aux programmes sélectionnés, 
+y compris celles situées en dehors du périmètre géographique d’intérêt. Cette situation résulte du fonctionnement même de l’\gls{api} 
+\gls{quadrige}, qui raisonne à l’échelle des programmes et non des stations individuelles.
+
+Afin de garantir la cohérence géographique des données exploitées, un filtrage a posteriori a été mis en œuvre à l’aide de la 
+bibliothèque pandas. Ce traitement consiste à ne conserver que les instances dont le code de monitoring location correspond au 
+territoire ciblé, identifié par un préfixe spécifique (par exemple « 126- » pour La Réunion).
+
+Ce filtrage permet de produire un second fichier CSV, strictement limité aux stations pertinentes, utilisé à la fois pour 
+l’affichage dans l’interface utilisateur et comme base pour les extractions de données ultérieures.
 
 Par la suite, je n’ai besoin que du code du programme pour extraire les données recherchées.
 
@@ -38,11 +47,11 @@ notamment les dates ou la localisation (automatiquement reprise depuis le dernie
 ---
 
 En parallèle, j’ai conçu l’architecture du backend, fondée sur un \textit{blueprint} Flask dédié, afin d’assurer 
-l’authentification auprès de l’API Quadrige, l’interrogation des programmes disponibles et la structuration des données 
+l’authentification auprès de l’\gls{api} \gls{quadrige}, l’interrogation des programmes disponibles et la structuration des données 
 nécessaires à un futur import dans GeoNature. Une attention particulière a été portée à la construction des requêtes GraphQL, 
 afin de cibler les informations utiles tout en limitant le volume des échanges.
 
-Le développement du frontend a permis de mettre en place une première interface d’exploration des programmes Quadrige 
+Le développement du frontend a permis de mettre en place une première interface d’exploration des programmes \gls{quadrige} 
 directement dans GeoNature. Bien qu’encore partielle, cette interface constitue une base solide pour les futures 
 fonctionnalités de sélection, de filtrage et d’extraction. Ces travaux ont donné lieu à plusieurs phases de tests, 
 notamment via PyTest pour le backend et Cypress pour l’interface utilisateur, afin de valider les mécanismes centraux 
@@ -50,12 +59,12 @@ avant leur intégration complète.
 
 \paragraph{Travaux parallèles sur l’intégration de Pl@ntNet}
 
-En parallèle du développement principal consacré à Quadrige, j’ai également initié un travail structurant autour de l’intégration des données \gls{plantnet} dans GeoNature. 
-L’objectif était double~: d'une part valider la possibilité technique d’interroger l’API Pl@ntNet depuis un service Python, et d'autre part poser les bases d’un parseur Darwin Core utilisable par un module GeoNature, selon une logique similaire à celle mise en place pour Quadrige.
+En parallèle du développement principal consacré à \gls{quadrige}, j’ai également initié un travail structurant autour de l’intégration des données \gls{plantnet} dans GeoNature. 
+L’objectif était double~: d'une part valider la possibilité technique d’interroger l’\gls{api} Pl@ntNet depuis un service Python, et d'autre part poser les bases d’un parseur Darwin Core utilisable par un module GeoNature, selon une logique similaire à celle mise en place pour \gls{quadrige}.
 
 Pour cela, j’ai développé un client Python générique capable de~:
 \begin{itemize}
-    \item envoyer des requêtes POST vers l’endpoint \texttt{dwc/occurrence/search} de l’API Pl@ntNet~;
+    \item envoyer des requêtes POST vers l’endpoint \texttt{dwc/occurrence/search} de l’\gls{api} Pl@ntNet~;
     \item gérer dynamiquement les paramètres taxonomiques, spatiaux (bbox ou polygone GeoJSON) et temporels~;
     \item enregistrer les réponses brutes au format JSON~;
     \item transformer ces réponses en un CSV conforme au standard Darwin Core (DwC), en s’appuyant sur des fichiers de configuration modulaires.
@@ -73,14 +82,14 @@ Une attention particulière a été portée à la normalisation des données~:
 Ce travail a conduit à la mise en place d’un pipeline complet :
 
 \[
-\text{API} \;\rightarrow\; \text{JSON brut} \;\rightarrow\; \text{CSV Darwin Core normalisé}
+\text{\gls{api}} \;\rightarrow\; \text{JSON brut} \;\rightarrow\; \text{CSV Darwin Core normalisé}
 \]
 
 entièrement automatisé et adaptable à d’autres territoires ou taxons via un simple fichier de configuration.
 
-Ce client constitue aujourd’hui la base technique du parser Pl@ntNet destiné au module \texttt{api2gn}, dont l’intégration a nécessité plusieurs ajustements dans les migrations SQL et dans la structure interne du module.
+Ce client constitue aujourd’hui la base technique du parser Pl@ntNet destiné au module \texttt{\gls{api}2gn}, dont l’intégration a nécessité plusieurs ajustements dans les migrations SQL et dans la structure interne du module.
 
 
-Enfin, une documentation détaillée a été rédigée tout au long du projet. Elle décrit les procédures d’appel aux API, 
+Enfin, une documentation détaillée a été rédigée tout au long du projet. Elle décrit les procédures d’appel aux \gls{api}, 
 les choix techniques effectués ainsi que les étapes d’installation et de maintenance du module. Ce travail de 
-capitalisation est essentiel pour permettre la reprise du projet par la DEAL ou ses partenaires.
+c\gls{api}talisation est essentiel pour permettre la reprise du projet par la DEAL ou ses partenaires.
