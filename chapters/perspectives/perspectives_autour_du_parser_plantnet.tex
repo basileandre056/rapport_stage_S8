@@ -1,26 +1,21 @@
 
-
-
-
-Les travaux menés sur l’intégration des données \gls{plantnet} ont permis de valider la 
-faisabilité technique d’un pipeline complet, depuis l’interrogation de l’\gls{api} jusqu’à la 
-production de fichiers conformes au standard Darwin Core. Toutefois, le parser développé 
-repose actuellement sur des fichiers de configuration manipulés côté backend.
-
+Les travaux menés sur l’intégration des données \gls{plantnet} ont permis de valider la faisabilité 
+technique d’un pipeline complet, depuis l’interrogation de l’API jusqu’à la production de 
+fichiers conformes au standard Darwin Core. Toutefois, ces données étant issues d’une 
+application participative, leur exploitation soulève des enjeux spécifiques de validation et de 
+qualité scientifique.
 
 \subsection{Ajout d’une interface d’administration dédiée}
 
 Une perspective majeure consisterait à proposer une interface frontend permettant aux 
-administrateurs de paramétrer le parser \gls{plantnet} sans recourir à la modification de 
-fichiers de configuration. Cette interface pourrait offrir la possibilité de définir les taxons 
-ciblés, les périmètres géographiques (boîtes englobantes ou polygones), les plages temporelles, 
-ainsi que les paramètres de normalisation et de filtrage.
+administrateurs de paramétrer le parser \gls{plantnet} sans recourir à la modification de fichiers de 
+configuration. Cette interface pourrait permettre de définir les taxons ciblés, les périmètres 
+géographiques, les plages temporelles ainsi que les paramètres de filtrage et de normalisation.
 
-Une telle évolution améliorerait significativement l’ergonomie du dispositif et faciliterait 
-son utilisation par des profils non techniques. Elle permettrait également d’harmoniser 
-l’expérience utilisateur avec celle du module \gls{quadrige}, en proposant une logique 
-d’interaction cohérente au sein de GeoNature.
-
+Une telle évolution améliorerait significativement l’ergonomie du dispositif et faciliterait son 
+utilisation par des profils non techniques. Elle permettrait également d’harmoniser l’expérience 
+utilisateur avec celle du module \gls{quadrige}, en proposant une logique d’interaction cohérente au 
+sein de GeoNature.
 
 \subsection{Contraintes liées au module api2gn}
 
@@ -28,20 +23,21 @@ Dans l’état actuel, cette évolution n’est toutefois pas immédiatement ré
 \texttt{api2gn} est un module officiel de GeoNature, dont l’architecture n’a pas été conçue à 
 l’origine pour intégrer des interfaces frontend spécifiques à chaque source de données.
 
-Toute extension de ce type nécessiterait soit une évolution structurelle du module \texttt{api2gn} 
-lui-même, soit la création d’un module externe complémentaire venant piloter le parser 
-\gls{plantnet}. Cette réflexion dépasse le cadre du stage, mais les travaux réalisés constituent 
+Toute extension de ce type nécessiterait soit une évolution structurelle du module 
+\texttt{api2gn} lui-même, soit la création d’un module externe complémentaire venant piloter le 
+parser \gls{plantnet}. Cette réflexion dépasse le cadre du stage, mais les travaux réalisés constituent 
 une base technique solide pour initier ce type d’évolution à l’avenir.
 
+\subsection{Renforcement des mécanismes de validation et d’incrémentalité}
 
-\subsection{Vers une intégration renforcée des données participatives}
+Les données \gls{plantnet} étant saisies par des utilisateurs non experts, la validation des taxons 
+constitue un enjeu central. Le parser développé intègre déjà un mécanisme de validation basé 
+sur la comparaison des \textit{scientific names} avec les référentiels taxonomiques utilisés par 
+GeoNature, ainsi que sur des interrogations complémentaires de services externes lorsque cela 
+est nécessaire. Un historique des taxons validés et rejetés est également conservé.
 
-
-À plus long terme, l’intégration des données issues de \gls{plantnet} dans GeoNature pourrait 
-contribuer à enrichir significativement les données naturalistes disponibles, en particulier 
-pour le suivi des espèces exotiques envahissantes végétales.
-
-L’automatisation du pipeline \gls{api} → Darwin Core → GeoNature, couplée à des mécanismes de 
-filtrage et de validation adaptés, offrirait un levier intéressant pour exploiter des volumes 
-importants de données participatives tout en respectant les exigences de qualité et de 
-traçabilité du \gls{sinp}.
+Une perspective d’amélioration consisterait à renforcer ces mécanismes, notamment en affinant 
+la gestion des requêtes incrémentales. Actuellement, les extractions sont réalisées par blocs de 
+1\,000 occurrences. Il pourrait être pertinent de permettre une reprise plus fine des 
+extractions interrompues, afin d’éviter de relancer l’ensemble des requêtes en cas d’arrêt 
+partiel du traitement.

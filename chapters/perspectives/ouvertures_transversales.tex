@@ -1,10 +1,24 @@
 
-Au-delà des deux modules développés, les travaux réalisés ouvrent des perspectives plus larges 
-sur l’architecture des imports dans GeoNature. L’approche retenue, fondée sur des modules 
-externes, une forte traçabilité et une séparation claire entre extraction, préparation et import, 
-pourrait être généralisée à d’autres sources de données environnementales.
+Les développements réalisés durant ce stage ont permis de mettre en évidence l’intérêt d’adapter 
+les stratégies d’intégration des données en fonction de la nature et de l’origine des sources 
+mobilisées. Les travaux menés sur \gls{quadrige} et \gls{plantnet} illustrent deux approches 
+complémentaires, répondant à des contraintes distinctes.
 
-Cette logique modulaire facilite la mutualisation des développements, la reprise des projets par 
-différents acteurs et l’adaptation des outils aux spécificités territoriales. Elle s’inscrit 
-pleinement dans la stratégie de modernisation du \gls{sinp} et dans les objectifs de fiabilisation 
-et d’harmonisation des données naturalistes portés par la DEAL Réunion et ses partenaires.
+Pour les données issues de \gls{quadrige}, produites dans un cadre institutionnel et scientifique, 
+la priorité a été donnée à la traçabilité et au contrôle des extractions. La séparation entre les 
+phases d’extraction, de préparation et d’intégration permet de conserver un contrôle humain sur 
+des données pouvant être soumises à des règles de diffusion spécifiques (anonymisation, 
+moratoires), tout en préparant leur intégration progressive dans GeoNature.
+
+À l’inverse, les données issues de \gls{plantnet}, bien que participatives, peuvent faire l’objet d’un 
+traitement largement automatisé. Le pipeline mis en place intègre des mécanismes de validation 
+taxonomique reposant sur les référentiels utilisés par GeoNature, permettant d’identifier, de 
+corriger ou de rejeter automatiquement les observations non conformes. Les données validées 
+peuvent ainsi être intégrées directement dans la base GeoNature, sans intervention manuelle, 
+tout en conservant un historique des décisions prises par le système.
+
+Cette distinction entre intégration contrôlée et intégration automatisée souligne l’importance 
+d’une architecture d’import flexible, capable de s’adapter aux caractéristiques des sources de 
+données. Elle ouvre la voie à une gestion différenciée des flux, conciliant exigences de qualité 
+scientifique, efficacité opérationnelle et montée en charge des systèmes d’information 
+naturalistes.

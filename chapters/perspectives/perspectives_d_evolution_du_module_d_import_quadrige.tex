@@ -1,15 +1,13 @@
-
-Le module d’import \gls{quadrige} développé durant le stage constitue une première brique 
+Le module d’import {\gls{quadrige}} développé durant le stage constitue une première brique 
 fonctionnelle permettant d’explorer, d’extraire et de préparer des données marines issues du 
-système d’information \gls{quadrige}. Plusieurs axes d’amélioration peuvent être envisagés afin 
-d’en accroître la maturité et de faciliter son intégration opérationnelle à long terme.
-
+système d’information \gls{quadrige}. Plusieurs axes d’amélioration peuvent être envisagés afin d’en 
+accroître la maturité et de faciliter son intégration opérationnelle à long terme.
 
 \subsection{Amélioration de l’ergonomie et de l’intégration visuelle}
-
+    
 Une première évolution concernerait l’intégration visuelle du module au sein de l’interface 
-GeoNature. L’ajout d’un pictogramme dédié dans la barre de navigation ou dans la liste des modules 
-permettrait d’identifier plus clairement le module \gls{quadrige} parmi les autres extensions 
+GeoNature. L’ajout d’un pictogramme dédié dans la barre de navigation ou dans la liste des 
+modules permettrait d’identifier plus clairement le module \gls{quadrige} parmi les autres extensions 
 disponibles.
 
 Ce pictogramme contribuerait à améliorer l’expérience utilisateur en rendant le module plus 
@@ -17,52 +15,80 @@ visible et plus intuitif pour les administrateurs amenés à l’utiliser ponctu
 faciliterait également son appropriation par de nouveaux utilisateurs, notamment dans un 
 contexte de reprise du projet ou de déploiement sur d’autres territoires.
 
+\subsection{Ajout d’une étape de mise en forme et d’intégration des données}
 
-\subsection{Génération directe de fichiers au format GeoNature}
+À l’heure actuelle, le module produit des archives de données (fichiers CSV bruts, CSV filtrés, 
+fichiers JSON de paramètres) à l’issue de la phase d’extraction depuis l’API \gls{quadrige}. Ces 
+archives constituent une étape intermédiaire volontaire, permettant un contrôle manuel des 
+résultats avant toute intégration dans GeoNature.
 
-À l’heure actuelle, le module produit des fichiers intermédiaires (CSV bruts, CSV filtrés, 
-fichiers JSON de paramètres) destinés à être analysés et, le cas échéant, retravaillés avant 
-import dans GeoNature. Cette approche garantit une forte traçabilité, mais implique encore une 
-étape manuelle avant l’intégration finale.
+Une évolution naturelle du module consisterait à ajouter une étape supplémentaire, positionnée 
+après la génération des fichiers ZIP, dédiée à la mise en forme finale et à l’intégration des 
+données dans la base GeoNature. Cette étape pourrait inclure la transformation des données vers 
+le schéma de synthèse, ainsi que leur préparation pour un import direct dans la base de données.
 
-Une évolution naturelle du module consisterait à ajouter une étape optionnelle de transformation 
-automatique des données extraites vers un format directement compatible avec les mécanismes 
-d’import de GeoNature. Cette étape pourrait s’appuyer sur le schéma de synthèse et sur les règles 
-existantes des modules d’import afin de produire un fichier immédiatement prêt à être injecté 
-dans le système.
+Cette évolution permettrait de proposer une chaîne complète allant de l’extraction à 
+l’intégration, tout en conservant la possibilité de valider manuellement les données en amont. 
+Elle resterait compatible avec les exigences de traçabilité et de contrôle associées au 
+\gls{sinp}.
 
-Cette fonctionnalité pourrait être activée de manière conditionnelle, laissant le choix à 
-l’administrateur entre une extraction préparatoire avec contrôle manuel ou une extraction 
-complète incluant la génération d’un fichier directement importable.
+\subsection{Clarification et extension de la gestion de la configuration}
 
+Le module repose déjà sur un fichier de configuration centralisé, chargé côté backend dans 
+l’environnement GeoNature. Ce fichier permet notamment de définir les paramètres techniques 
+essentiels tels que l’URL de l’API \gls{quadrige} et le jeton d’authentification, qui sont ensuite mis à 
+disposition du backend.
 
-\subsection{Centralisation de la configuration côté backend}
+Le backend expose également le contenu de ce fichier de configuration via une route dédiée, 
+permettant théoriquement au frontend d’accéder dynamiquement à ces informations. Toutefois, 
+par manque de temps, certaines données métier — telles que les localisations suggérées lors du 
+filtrage des programmes ou la liste des champs disponibles pour l’extraction — restent définies 
+directement dans le frontend.
 
-Au cours du développement, certaines difficultés ont été identifiées dans la gestion de la 
-configuration du module, notamment concernant les localisations proposées lors du filtrage des 
-programmes et les champs disponibles pour l’extraction. Une partie de ces paramètres est 
-actuellement définie directement dans le frontend Angular, ce qui limite la flexibilité du 
-module et complique son évolution.
+Une évolution souhaitable consisterait à étendre le rôle du fichier de configuration afin d’y 
+inclure ces éléments métier, puis à adapter le frontend pour les charger dynamiquement depuis 
+le backend. Cette approche permettrait de réduire les valeurs codées en dur dans l’interface, 
+d’améliorer la cohérence entre backend et frontend et de faciliter l’adaptation du module à 
+d’autres territoires ou contextes d’usage.
 
-Une perspective importante consisterait à centraliser l’ensemble de ces paramètres dans un 
-fichier de configuration côté backend. Le module expose déjà un endpoint permettant d’accéder 
-au contenu de ce fichier, mais son exploitation n’a pas pu être finalisée durant le stage par 
-manque de temps.
-
-Une refonte partielle du frontend permettrait ainsi de charger dynamiquement les localisations 
-disponibles et les champs d’extraction depuis le backend, d’éviter les valeurs codées en dur dans 
-l’interface et de faciliter l’adaptation du module à d’autres territoires sans modification du 
-code frontend. Cette approche renforcerait la maintenabilité globale du module et réduirait les 
-risques d’incohérence entre backend et frontend.
-
-\subsection{Vers une automatisation partielle des imports}
-
+\subsection{Vers une automatisation partielle et maîtrisée des imports}
 
 À plus long terme, le module pourrait évoluer vers une automatisation partielle ou contrôlée des 
 imports, par exemple via des imports périodiques planifiés, des imports incrémentaux basés sur 
 les dates de mise à jour des données, ou des déclenchements manuels avec validation préalable.
 
-De telles évolutions nécessiteraient toutefois une réflexion approfondie sur la gestion des 
-doublons, la validation scientifique des données et la traçabilité des mises à jour, afin de 
-rester cohérentes avec les exigences du \gls{sinp} et les pratiques de contrôle des données 
-naturalistes.
+Toutefois, certaines spécificités des données \gls{quadrige} imposent de conserver un contrôle humain 
+sur les résultats des extractions. Certaines informations peuvent être anonymisées (par exemple 
+les données relatives aux observateurs) ou soumises à des moratoires de diffusion. Il est donc 
+actuellement nécessaire de vérifier les résultats des extractions avant tout traitement visant à 
+leur intégration dans GeoNature.
+
+Ces contraintes devront être pleinement prises en compte dans toute évolution vers une 
+automatisation plus poussée, afin de rester cohérent avec les exigences du \gls{sinp} et les 
+pratiques de contrôle des données naturalistes.
+
+
+\subsection{Renforcement de la stratégie de tests et de validation}
+
+
+
+Les modules externes GeoNature sont conçus pour s’inscrire dans une logique de maintenance à 
+long terme. À ce titre, la documentation officielle recommande la mise en place de tests 
+automatisés, notamment des tests unitaires et fonctionnels côté backend (via PyTest) ainsi que 
+des tests de bout en bout (\textit{end-to-end}) côté frontend (via Cypress).
+
+Dans le cadre de ce stage, des tests ont été développés et validés sur la version locale du 
+module Quadrige, afin de vérifier le bon fonctionnement des principaux composants : appels à 
+l’API Quadrige, gestion des erreurs, génération des fichiers d’export et cohérence des routes 
+exposées par le backend. De la même manière, des scénarios de tests frontend ont été amorcés 
+pour valider les parcours utilisateurs essentiels.
+
+Toutefois, en raison des contraintes de temps et du calendrier de déploiement sur les serveurs 
+du SINP-974, ces tests n’ont pas pu être intégrés dans la version du module effectivement 
+déployée sur l’environnement serveur. 
+
+Une perspective importante consisterait donc à intégrer ces suites de tests dans la 
+version déployée du module, afin de renforcer sa robustesse, de sécuriser les évolutions futures 
+et de faciliter sa reprise par d’autres développeurs. La généralisation des tests automatisés 
+permettrait également de s’inscrire plus étroitement dans les bonnes pratiques recommandées 
+pour le développement et la maintenance des modules externes GeoNature.
