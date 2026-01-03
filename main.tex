@@ -155,6 +155,14 @@
 \setlength{\floatsep}{1.6em}
 \setlength{\intextsep}{1.6em}
 
+% ===== CHAPITRE ANNEXES (version compacte) =====
+\newcommand{\BlueChapterAnnexes}[1]{%
+  \clearpage
+  \phantomsection
+  {\Huge\bfseries\color{ENIBblue}#1}\par
+  \addcontentsline{toc}{chapter}{#1}%
+  \vspace{0.8em} % <-- volontairement réduit
+}
 
 
     
@@ -308,6 +316,13 @@
 \let\ps@plain\ps@standard
 \makeatother
 
+% ===== ENVIRONNEMENT TEXTE LIMINAIRE (remerciements, résumés) =====
+\newenvironment{frontmattertext}{%
+  \setstretch{1.3}%
+  \setlength{\parskip}{0.4em}%
+}{}
+
+
 %===============================================================================
 % DOCUMENT
 %===============================================================================
@@ -325,25 +340,35 @@
 % ------------------------------------------
 
 \BlueChapter{Remerciements}
+\begin{frontmattertext}
 \input{chapters/remerciements}
-
+\end{frontmattertext}
 
 \BlueChapter{Résumé (FR)}
+\begin{frontmattertext}
 \input{chapters/resumes/resume_fr}
+\end{frontmattertext}
 
 \BlueChapter{Abstract (EN)}
+\begin{frontmattertext}
 \input{chapters/resumes/resume_en}
+\end{frontmattertext}
 
 % ------------------------------------------
 % TABLE DES MATIÈRES 
 % ------------------------------------------
-\clearpage        % force un saut de page
-\phantomsection   % assure une bonne ancre pour hyperref
-\begingroup
-\small
-\tableofcontents
-\endgroup
 \clearpage
+\phantomsection
+
+\begingroup
+  \small
+  \setstretch{1.0}        % interligne normal
+  \setlength{\parskip}{0pt} % pas d’espace entre entrées
+  \tableofcontents
+\endgroup
+
+\clearpage
+
 
 % GLOSSAIRE
 \BlueChapter{Glossaire}
@@ -437,7 +462,8 @@
 % ------------------------------------------
 % ANNEXES
 % ------------------------------------------
-\BlueChapter{Annexes}
+\BlueChapterAnnexes{Annexes}
+\enlargethispage{1.5\baselineskip}
 \input{chapters/annexes}
 
 
