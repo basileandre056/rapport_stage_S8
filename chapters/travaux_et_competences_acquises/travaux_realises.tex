@@ -1,95 +1,117 @@
-\noindent
 
-Les travaux réalisés au cours du stage se sont concentrés principalement sur le développement d’un module externe pour 
-GeoNature, capable d’interagir avec le système d’information \gls{quadrige}. La première étape a consisté à concevoir 
-un client Python permettant de tester l’envoi de requêtes GraphQL auprès de l’\gls{api} \gls{quadrige}, de récupérer les données 
-et de gérer l’authentification via un jeton.
+Les travaux réalisés au cours du stage se sont articulés autour de deux axes
+principaux.
 
-Une fois les fonctions d’interrogation terminées, je suis passé au développement d’un prototype local du frontend Angular.
-Il se compose de quatre composants principaux. Le premier, \texttt{program-list}, affiche la liste des programmes extraits 
-en fonction d'une localisation (par exemple «~126-~» comme préfixe pour La Réunion). C’est depuis ce composant principal 
-que s’effectuent les échanges backend/frontend.
+Le premier axe concerne le développement d’un module externe pour GeoNature,
+dédié à l’exploration et à l’extraction de données marines issues du système
+d’information \gls{quadrige}.
 
-Le composant \texttt{program-filter} permet de définir un filtre incluant une localisation et un nom de filtre. 
-Les critères sont sauvegardés dans le fichier memory/last\_filter.json.  
-Ce filtre sert à extraire les programmes selon des règles bien définies. La requête GraphQL utilisée est 
-\texttt{executeProgramExtraction}, qui comporte de nombreux paramètres optionnels, mais dont seuls ceux relatifs à la 
-localisation nous intéressent. L’objectif est d’extraire tout programme comportant au moins une instance dans la zone spécifiée.
+Le second axe porte sur un travail complémentaire autour de l’intégration
+de données participatives produites par l’application \gls{plantnet}.
+L’objectif était de poser les bases techniques d’un futur parseur,
+adapté à une intégration automatisée dans GeoNature.
 
-Un bouton «~Extraire les programmes~» déclenche la fonction d’extraction, qui envoie la requête GraphQL à \gls{quadrige} 
-et récupère les programmes correspondant au filtre. Un message d’état informe l’utilisateur de l’avancement 
-(«~extraction en cours~», «~programmes extraits~») et, en cas d’erreur, un message approprié s’affiche.
+L’ensemble des développements a été mené dans une logique d’intégration
+au système d’information existant.
+Les choix effectués prennent en compte les contraintes techniques,
+organisationnelles et métier propres au \gls{sinp}.
 
-Lorsque l’extraction est terminée, un fichier CSV est produit et stocké dans \texttt{memory/csv\_brut\_suffixe}, 
-associé au filtre utilisé. Il contient toutes les instances des programmes ayant au moins une occurrence dans la zone filtrée. 
+\subsection{Vue d’ensemble des développements}
 
+Les développements réalisés comprennent plusieurs volets complémentaires.
 
-Le fichier CSV généré à l’issue de cette première extraction contient l’ensemble des instances associées aux programmes sélectionnés, 
-y compris celles situées en dehors du périmètre géographique d’intérêt. Cette situation résulte du fonctionnement même de l’\gls{api} 
-\gls{quadrige}, qui raisonne à l’échelle des programmes et non des stations individuelles.
+Ils incluent la conception d’un module GeoNature externe,
+interfacé avec l’\gls{api} de \gls{quadrige},
+permettant d’explorer les programmes disponibles
+et d’en extraire les données associées.
 
-Afin de garantir la cohérence géographique des données exploitées, un filtrage a posteriori a été mis en œuvre à l’aide de la 
-bibliothèque pandas. Ce traitement consiste à ne conserver que les instances dont le code de monitoring location correspond au 
-territoire ciblé, identifié par un préfixe spécifique (par exemple « 126- » pour La Réunion).
+Ils comprennent également la mise en place d’une interface frontend
+intégrée à GeoNature.
+Cette interface permet de rechercher, filtrer et sélectionner
+des programmes et des données à extraire.
 
-Ce filtrage permet de produire un second fichier CSV, strictement limité aux stations pertinentes, utilisé à la fois pour 
-l’affichage dans l’interface utilisateur et comme base pour les extractions de données ultérieures.
+Les extractions produisent des fichiers intermédiaires documentés,
+destinés à une intégration différée dans GeoNature.
+Cette approche permet de conserver un contrôle sur les données produites
+avant toute insertion en base.
 
-Par la suite, je n’ai besoin que du code du programme pour extraire les données recherchées.
+Enfin, une documentation technique et utilisateur a été rédigée
+tout au long du projet.
+Elle décrit les principes de fonctionnement du module,
+les procédures d’installation,
+ainsi que les modalités d’utilisation et de maintenance.
 
-Une fois les programmes extraits, ils sont affichés dans \texttt{program-list} avec leur nom, leurs dates de début et de fin 
-et le(s) responsable(s). L’utilisateur peut sélectionner les programmes via une barre de recherche, des cases cochables et 
-une option «~tout cocher~».
+L’ensemble de ces travaux a été conçu pour produire un outil fonctionnel,
+maintenable et réutilisable.
+Le module est destiné à être repris ou étendu par les équipes de la
+\gls{deal} ou par d’autres structures partenaires.
 
-Un composant \texttt{data-filter} permet ensuite de filtrer les données des programmes sélectionnés selon plusieurs critères, 
-notamment les dates ou la localisation (automatiquement reprise depuis le dernier filtre créé).
+\subsection{Travaux principaux : module \gls{quadrige}}
 
----
+Les travaux principaux du stage ont porté sur le développement
+du module \gls{quadrige} pour GeoNature.
 
-En parallèle, j’ai conçu l’architecture du backend, fondée sur un \textit{blueprint} Flask dédié, afin d’assurer 
-l’authentification auprès de l’\gls{api} \gls{quadrige}, l’interrogation des programmes disponibles et la structuration des données 
-nécessaires à un futur import dans GeoNature. Une attention particulière a été portée à la construction des requêtes GraphQL, 
-afin de cibler les informations utiles tout en limitant le volume des échanges.
+Ce module permet d’interroger l’\gls{api} GraphQL mise à disposition par
+l’Ifremer afin d’identifier les programmes pertinents
+pour un périmètre géographique donné.
+Il offre ensuite la possibilité d’extraire les données associées
+selon des critères définis par l’utilisateur.
 
-Le développement du frontend a permis de mettre en place une première interface d’exploration des programmes \gls{quadrige} 
-directement dans GeoNature. Bien qu’encore partielle, cette interface constitue une base solide pour les futures 
-fonctionnalités de sélection, de filtrage et d’extraction. Ces travaux ont donné lieu à plusieurs phases de tests, 
-notamment via PyTest pour le backend et Cypress pour l’interface utilisateur, afin de valider les mécanismes centraux 
-avant leur intégration complète.
+Le module repose sur une architecture découplée,
+séparant clairement le backend et le frontend.
+Le backend est responsable des échanges avec l’\gls{api},
+de l’authentification,
+du suivi des extractions
+et de la gestion des fichiers produits.
+Le frontend se limite au pilotage des opérations
+et à la visualisation des résultats.
 
-\paragraph{Travaux parallèles sur l’intégration de Pl@ntNet}
+Les extractions réalisées produisent des fichiers intermédiaires,
+notamment des fichiers \gls{csv} et des archives compressées.
+Ces fichiers sont accompagnés de métadonnées décrivant précisément
+les paramètres d’extraction utilisés.
+Cette organisation garantit la traçabilité des opérations
+et facilite l’analyse des résultats.
 
-En parallèle du développement principal consacré à \gls{quadrige}, j’ai également initié un travail structurant autour de l’intégration des données \gls{plantnet} dans GeoNature. 
-L’objectif était double~: d'une part valider la possibilité technique d’interroger l’\gls{api} Pl@ntNet depuis un service Python, et d'autre part poser les bases d’un parseur Darwin Core utilisable par un module GeoNature, selon une logique similaire à celle mise en place pour \gls{quadrige}.
+Le module a été conçu comme une brique préparatoire.
+Il ne réalise pas directement l’import des données en base GeoNature,
+mais vise à sécuriser les étapes amont
+et à faciliter une intégration future
+dans le respect des règles du \gls{sinp}.
 
-Pour cela, j’ai développé un client Python générique capable de~:
-\begin{itemize}
-    \item envoyer des requêtes POST vers l’endpoint \texttt{dwc/occurrence/search} de l’\gls{api} Pl@ntNet~;
-    \item gérer dynamiquement les paramètres taxonomiques, spatiaux (bbox ou polygone GeoJSON) et temporels~;
-    \item enregistrer les réponses brutes au format JSON~;
-    \item transformer ces réponses en un CSV conforme au standard Darwin Core (DwC), en s’appuyant sur des fichiers de configuration modulaires.
-\end{itemize}
+\subsection{Travaux complémentaires : \gls{plantnet}}
 
-Une attention particulière a été portée à la normalisation des données~:
-\begin{itemize}
-    \item homogénéisation des dates au format ISO-8601~;
-    \item nettoyage et standardisation des coordonnées ainsi que du datum géodésique~;
-    \item génération d’identifiants stables (\texttt{occurrenceID})~;
-    \item mappage des vocabulaires Pl@ntNet vers ceux utilisés dans GBIF (\texttt{basisOfRecord})~;
-    \item sérialisation propre des champs complexes (listes, objets JSON).
-\end{itemize}
+En parallèle du développement du module \gls{quadrige},
+un travail complémentaire a été mené autour de l’intégration
+des données issues de \gls{plantnet}.
 
-Ce travail a conduit à la mise en place d’un pipeline complet :
+L’objectif de ce travail était d’évaluer la faisabilité technique
+d’une intégration automatisée de données participatives
+dans GeoNature.
+Il s’agissait également de poser les bases d’un futur parseur
+utilisable par le module \gls{api2gn}.
 
-\[
-\text{\gls{api}} \;\rightarrow\; \text{JSON brut} \;\rightarrow\; \text{CSV Darwin Core normalisé}
-\]
+Un client Python générique a été développé
+pour interroger l’\gls{api} \gls{plantnet},
+récupérer les observations
+et enregistrer les réponses brutes au format \gls{json}.
 
-entièrement automatisé et adaptable à d’autres territoires ou taxons via un simple fichier de configuration.
+Ces données ont ensuite été transformées
+en fichiers \gls{csv} conformes au standard Darwin Core.
+Une attention particulière a été portée à la normalisation des champs,
+à la gestion des dates,
+aux coordonnées géographiques
+et à la génération d’identifiants stables.
 
-Ce client constitue aujourd’hui la base technique du parser Pl@ntNet destiné au module \texttt{\gls{api}2gn}, dont l’intégration a nécessité plusieurs ajustements dans les migrations SQL et dans la structure interne du module.
+Ce travail a conduit à la mise en place d’un pipeline complet,
+entièrement automatisé,
+reposant sur une configuration externalisée.
+Ce pipeline constitue aujourd’hui la base technique
+du parseur \gls{plantnet} intégré au module \gls{api2gn}.
 
-
-Enfin, une documentation détaillée a été rédigée tout au long du projet. Elle décrit les procédures d’appel aux \gls{api}, 
-les choix techniques effectués ainsi que les étapes d’installation et de maintenance du module. Ce travail de 
-c\gls{api}talisation est essentiel pour permettre la reprise du projet par la DEAL ou ses partenaires.
+Bien que complémentaire au module \gls{quadrige},
+ce travail s’inscrit dans la même logique globale.
+Il vise à démontrer la capacité de GeoNature
+à intégrer des sources de données hétérogènes,
+tout en respectant les exigences de qualité,
+de traçabilité et de cohérence du \gls{sinp}.

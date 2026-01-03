@@ -1,0 +1,57 @@
+Plusieurs arbitrages techniques ont été réalisés
+tout au long du stage.
+Ces choix ont été guidés par les contraintes métier,
+les usages existants
+et les exigences de fiabilité
+associées aux données environnementales.
+
+Un premier choix structurant a consisté
+à adopter une approche intermédiaire.
+Le processus repose sur une succession d’étapes distinctes :
+extraction des données,
+contrôle,
+puis intégration différée.
+
+Une automatisation complète et immédiate
+de l’import en base GeoNature
+n’a pas été retenue.
+Ce choix permet de conserver
+un contrôle humain sur les données extraites,
+notamment dans un contexte
+où certaines informations
+peuvent être soumises
+à des règles de diffusion spécifiques.
+
+Dans cette logique,
+l’intégration directe des données \gls{quadrige}
+dans la base GeoNature
+n’a volontairement pas été implémentée.
+Le module produit des fichiers intermédiaires documentés,
+afin de sécuriser les étapes amont
+et de faciliter l’analyse des résultats.
+
+Concernant le filtrage géographique,
+un traitement a posteriori
+à l’aide de la bibliothèque \textit{pandas}
+a été privilégié.
+Ce choix s’explique par le fonctionnement même
+de l’\gls{api} \gls{quadrige},
+qui raisonne à l’échelle des programmes
+et non des stations individuelles.
+
+Enfin, la configuration des modules \gls{quadrige}
+et \gls{plantnet}
+a été entièrement externalisée
+dans des fichiers dédiés.
+Ce choix permet d’adapter les paramètres d’extraction
+sans modifier le code,
+de limiter les risques d’erreur
+et de faciliter le déploiement
+sur d’autres environnements.
+
+Ces arbitrages traduisent une volonté claire
+de privilégier la robustesse,
+la traçabilité
+et la réutilisabilité,
+plutôt qu’une automatisation maximale
+au détriment du contrôle des données.

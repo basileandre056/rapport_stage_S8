@@ -1,0 +1,79 @@
+
+Le déroulement du stage a été marqué
+par plusieurs contraintes techniques
+ayant influencé l’organisation du travail.
+
+L’absence d’une installation locale stable de GeoNature
+a constitué l’une des principales difficultés.
+Les incompatibilités entre certaines versions logicielles,
+les contraintes liées à Docker
+et les erreurs du serveur applicatif
+ont rendu nécessaire
+la mise en place d’un environnement de travail spécifique.
+
+Cette situation a été renforcée
+par les contraintes réseau de la \gls{deal}.
+La présence d’un proxy strict
+a perturbé l’utilisation
+de plusieurs outils de développement.
+La mise en place progressive
+d’un mécanisme de gestion dynamique du proxy
+a permis de stabiliser l’environnement.
+
+La migration des serveurs du \gls{sinp}
+vers un nouvel hébergeur
+a également limité l’accès
+à un environnement de test réaliste.
+Pendant plusieurs semaines,
+le développement a dû être poursuivi
+sans possibilité de déploiement direct.
+
+Une fois l’accès ouvert
+via une machine virtuelle bastion,
+les premières manipulations
+ont été freinées par les restrictions
+liées à l’accès distant.
+L’utilisation de Git
+comme canal principal de transfert
+s’est révélée déterminante
+pour poursuivre les tests
+et ajuster le module.
+
+Le travail sur les données \gls{plantnet}
+a également soulevé des difficultés spécifiques.
+L’\gls{api} renvoie des structures \gls{json}
+très hétérogènes,
+variables selon les taxons
+et les métadonnées disponibles.
+Cela a nécessité la conception
+d’un parseur robuste et flexible.
+
+Par ailleurs, le standard Darwin Core
+impose un modèle strict,
+qui ne correspond pas directement
+aux champs fournis par \gls{plantnet}.
+Un travail de mapping configurable
+a été nécessaire
+pour garantir la compatibilité
+avec GeoNature et Borbonica.
+
+Enfin, l’intégration du parseur
+au module \gls{api2gn}
+a mis en évidence certaines limites
+dans les migrations SQL existantes.
+Des ajustements ont été réalisés
+afin de permettre une installation correcte du module.
+
+Ces difficultés ont nécessité
+une forte capacité d’adaptation.
+Elles ont conduit
+à renforcer la documentation,
+à multiplier les tests exploratoires
+et à clarifier progressivement
+les environnements de travail.
+
+Elles ont également contribué
+à structurer une démarche rigoureuse,
+essentielle dans un contexte
+d’ingénierie logicielle appliquée
+aux données environnementales.
