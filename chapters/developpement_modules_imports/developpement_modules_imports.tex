@@ -11,9 +11,9 @@ saisie directement compatibles avec le SINP.
 
 À l’inverse, les données issues du milieu marin demeurent plus faiblement représentées. Les indicateurs de contenu disponibles 
 en 2024 montrent que les observations relatives aux taxons marins ne constituent qu’une part marginale des données référencées. 
-Cette situation ne traduit pas une absence de connaissances ou de suivis en milieu marin, mais résulte principalement de la 
-complexité des chaînes d’acquisition, de structuration et de diffusion propres aux données marines, historiquement gérées au sein 
-de systèmes d’information spécialisés.
+Cette situation ne traduit pas une absence de connaissances ou de suivis en milieu marin.
+Elle résulte principalement de la complexité des chaînes d’acquisition, de structuration et de diffusion propres aux données marines, 
+historiquement gérées au sein de systèmes d’information spécialisés.
 
 Dans ce contexte, l’enjeu principal n’était pas de refondre les outils existants, mais de renforcer progressivement la représentation 
 des données marines au sein du \gls{sinp}, en s’appuyant sur des sources de données déjà structurées, pérennes et reconnues 
@@ -44,11 +44,15 @@ Le module conserve également un accès aux trois derniers exports réalisés af
 
 En complément de ces archives, le module expose également des liens directs vers les fichiers CSV générés lors de la phase d’extraction 
 des programmes. Deux niveaux de fichiers sont distingués :
-– un CSV brut issu directement de la réponse de l’\gls{api} \gls{quadrige}, contenant l’ensemble des instances des programmes dont au moins une 
-occurrence est localisée sur le territoire ciblé ;
-– un CSV filtré géographiquement, obtenu par un traitement a posteriori à l’aide de la bibliothèque pandas, permettant d’exclure 
-les instances dont le code de monitoring location ne correspond pas au territoire d’intérêt (par exemple, codes ne commençant pas 
-par le préfixe « 126- » pour La Réunion).
+
+\begin{itemize}
+  \item un CSV brut issu directement de la réponse de l’\gls{api} \gls{quadrige}, contenant l’ensemble des instances des programmes dont au moins une 
+        occurrence est localisée sur le territoire ciblé ;
+  \item un CSV filtré géographiquement, obtenu par un traitement a posteriori à l’aide de la bibliothèque pandas, permettant d’exclure 
+        les instances dont le code de monitoring location ne correspond pas au territoire d’intérêt (par exemple, codes ne commençant pas 
+        par le préfixe « 126- » pour La Réunion).
+\end{itemize}
+
 
 Ce filtrage complémentaire est nécessaire car, lors de l’extraction des programmes, la requête adressée à l’\gls{api} \gls{quadrige} sélectionne 
 l’ensemble des programmes possédant au moins une instance sur le territoire demandé, mais retourne également les autres instances associées 
@@ -80,7 +84,7 @@ mots-clés et de sélectionner ceux à importer.
 Une fois les programmes choisis, l’utilisateur pouvait définir les filtres à appliquer aux données
 (la période d'intérêt, les champs souhaités, ou encore la reprise des stations déjà extraites).  
 Le module interrogeait alors l'api
-pour récupérer les observations correspondantes 
+pour récupérer les observations correspondantes.
 Seuls les champs utiles au modèle \gls{sinp} étaient extraits : identifiants des programmes et stations,
 localisation géographique, taxon observé, date, ainsi que les métadonnées essentielles (auteur,
 organisme, méthode d’acquisition, etc.). Une transformation était appliquée pour obtenir une
@@ -297,7 +301,7 @@ publication du module dans le catalogue officiel des extensions GeoNature.
 
 
 
-\section{Extension du module \gls{api2gn} pour l’intégration des données Pl@ntNet}
+\section{Extension du module api2GN pour l’intégration des données Pl@ntNet}
 
 \subsection{Rôle du module \gls{api2gn} dans l’écosystème GeoNature}
 
@@ -330,8 +334,7 @@ et des modalités d’accès très différentes de celles des bases institutionn
 \subsection{Objectifs et positionnement du parser Pl@ntNet}
 
 On peut retrouver la documentation du fonctionnement de l'API Pl@ntnet utilisée à cette adresse :  
-\href{https://my-api.plantnet.org/#/DarwinCore/postV3DwcOccurrenceSearch}{Documentation de l’API Pl@ntNet}.
-
+\href{https://my-api.plantnet.org/\#/DarwinCore/postV3DwcOccurrenceSearch}{Documentation de l’API Pl@ntNet}
 
 Le développement du parser Pl@ntNet s’inscrit dans une logique complémentaire à celle du module \gls{quadrige}. 
 Alors que l’import \gls{quadrige} vise des données institutionnelles, produites dans un cadre scientifique structuré 
