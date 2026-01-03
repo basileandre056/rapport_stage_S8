@@ -1,7 +1,6 @@
+Tout au long du stage, ces arbitrages ont été confrontés aux contraintes techniques concrètes du projet.
+Son déroulement a ainsi été marqué par plusieurs difficultés ayant influencé son organisation.
 
-Le déroulement du stage a été marqué
-par plusieurs contraintes techniques
-ayant influencé l’organisation du travail.
 
 L’absence d’une installation locale stable de GeoNature
 a constitué l’une des principales difficultés.
@@ -38,6 +37,46 @@ comme canal principal de transfert
 s’est révélée déterminante
 pour poursuivre les tests
 et ajuster le module.
+
+
+Une difficulté est apparue en fin de stage, lors du déploiement du module Quadrige sur le serveur de la DEAL.
+
+Le volume important de programmes Quadrige sur le périmètre de La Réunion était déjà connu en amont. Les tests réalisés 
+en local permettaient d’extraire plusieurs dizaines de programmes sans difficulté particulière, y compris lors de traitements 
+longs. Le module avait donc été conçu dès le départ pour gérer un nombre élevé de programmes, supérieur à 80.
+
+Les problèmes sont apparus lors des premiers déploiements en environnement réel. Le serveur GeoNature, basé sur une distribution 
+Debian, utilise une chaîne applicative reposant sur Apache et Gunicorn. Dans cette configuration, des timeouts bloquants sont 
+appliqués aux requêtes HTTP dépassant une durée d’environ 30 secondes.
+
+Lors du lancement des extractions Quadrige en conditions réelles, certaines requêtes longues dépassaient ce seuil. Cela entraînait 
+l’interruption complète du traitement, même lorsque seules quelques extractions restaient en cours. Ces échecs ne reflétaient pas un 
+problème fonctionnel de l’API Quadrige, mais une incompatibilité entre la durée des traitements et les contraintes du serveur applicatif.
+
+Pour répondre à cette contrainte, j’ai revu la logique d’orchestration des appels à l’API Quadrige. Les extractions sont désormais 
+lancées en batch, en soumettant l’ensemble des programmes sélectionnés lors d’une première phase rapide. Un mécanisme de polling 
+global permet ensuite de suivre l’état de chaque extraction de manière non bloquante, à l’aide de requêtes courtes compatibles avec 
+les timeouts imposés par Apache et Gunicorn.
+
+Cette approche permet de découpler le lancement des extractions de leur suivi, en évitant une logique strictement séquentielle. 
+Les appels lourds à l’API Quadrige sont remplacés par une succession de requêtes courtes de suivi d’état, compatibles avec les 
+contraintes de timeout imposées par Apache et Gunicorn.
+
+Bien que le traitement reste piloté par une requête unique côté GeoNature, cette organisation réduit fortement les risques de blocage 
+liés aux traitements longs. Elle permet également de maîtriser le temps global d’exécution et d’éviter qu’un programme lent n’entraîne 
+l’échec de l’ensemble de l’extraction
+
+Cette solution ne repose pas sur une exécution asynchrone complète côté serveur GeoNature, mais sur une orchestration optimisée des 
+appels à l’API Quadrige. Elle permet néanmoins de contourner efficacement les limitations liées aux timeouts applicatifs en production.
+
+Enfin, la récupération des résultats et le téléchargement des fichiers sont réalisés programme par programme. Les erreurs sont gérées 
+individuellement, ce qui permet de conserver les extractions valides même en cas d’échec partiel.
+
+Cette évolution a permis de rendre le module compatible avec les contraintes de l’environnement de production. Elle a supprimé les 
+timeouts rencontrés lors des premiers déploiements et renforcé la robustesse du module face aux montées en charge, tout en conservant 
+une traçabilité fine des opérations réalisées.
+
+
 
 Le travail sur les données \gls{plantnet}
 a également soulevé des difficultés spécifiques.

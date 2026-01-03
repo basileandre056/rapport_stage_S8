@@ -92,3 +92,8 @@ version déployée du module, afin de renforcer sa robustesse, de sécuriser les
 et de faciliter sa reprise par d’autres développeurs. La généralisation des tests automatisés 
 permettrait également de s’inscrire plus étroitement dans les bonnes pratiques recommandées 
 pour le développement et la maintenance des modules externes GeoNature.
+
+Dans l’état actuel, le module reste piloté par une requête HTTP unique côté GeoNature.
+Une évolution possible consisterait à découpler totalement le traitement de la requête HTTP,
+par exemple via une exécution en tâche de fond (Celery ou job système), afin de rendre le module
+pleinement asynchrone côté serveur GeoNature.

@@ -165,7 +165,7 @@ Les métadonnées associées à chaque extraction (localisation, horodatage, fil
 sauvegardées afin de permettre la reprise des extractions et la consultation des résultats 
 antérieurs.
 
-\subsection{Extraction des données et gestion asynchrone des traitements}
+\subsection{Extraction des données et orchestration des traitements asynchrones}
 
 L’extraction des données repose sur un mécanisme asynchrone propre à l’\gls{api} \gls{quadrige}. Pour chaque 
 programme sélectionné, une requête \gls{graphql} est soumise afin de lancer un job d’extraction côté 
@@ -213,9 +213,9 @@ des données et lancement des extractions. Des contrôles de cohérence sont int
 prévenir les erreurs de paramétrage, notamment sur les champs obligatoires ou les périodes 
 temporelles.
 
-Compte tenu du volume potentiellement élevé de programmes retournés par l’extraction 
-— pouvant dépasser plusieurs dizaines de résultats selon le périmètre géographique — 
-l’interface intègre des mécanismes de recherche par mots-clés afin de faciliter leur exploration 
+En fonction du périmètre géographique ciblé, l'extraction peut retourner plusieurs dizaines de programmes. 
+Il a donc fallu tenir compte de leur nombre potentiellement élevé, en integrant
+des mécanismes de recherche par mots-clés afin de faciliter leur exploration 
 et leur sélection. Il est ainsi possible de filtrer dynamiquement la liste des programmes extraits 
 en saisissant un terme dans la barre de recherche, permettant de cibler rapidement un programme 
 par son nom ou ses métadonnées associées.
