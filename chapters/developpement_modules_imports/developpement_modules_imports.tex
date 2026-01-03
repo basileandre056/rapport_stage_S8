@@ -305,9 +305,12 @@ Le module \texttt{\gls{api2gn}} constitue une brique transversale au sein de l�
 Il se distingue des modules d’import classiques, généralement fondés sur des fichiers intermédiaires produits manuellement, 
 en permettant l’intégration directe et automatisée de données issues de sources externes.
 
+
 Ces sources sont exposées via des services web, tels que des \gls{apirest}, des flux JSON structurés ou des services WFS. 
 Le module a été conçu pour répondre à des besoins d’automatisation et de récurrence, tout en respectant les contraintes 
 du modèle de données du \gls{sinp} et de la table \textit{Synthèse} de GeoNature.
+
+Le code source du module api2GN est disponible publiquement sur GitHub \href{https://github.com/PnX-SI/api2GN}{Dépôt officiel api2GN}.
 
 Son fonctionnement repose sur une séparation claire entre deux niveaux. 
 Le premier correspond au cœur du moteur d’import, chargé de l’orchestration des appels aux \gls{api}, 
@@ -325,6 +328,9 @@ Ces plateformes se caractérisent par des volumes importants, une fréquence de 
 et des modalités d’accès très différentes de celles des bases institutionnelles comme \gls{quadrige}.
 
 \subsection{Objectifs et positionnement du parser Pl@ntNet}
+
+Le fonctionnement de l’API Pl@ntNet, utilisée pour l’extraction des observations, est documenté par la plateforme elle-même\footnote{\href{https://my-api.plantnet.org/}{Documentation de l’API Pl@ntNet}}.
+
 
 Le développement du parser Pl@ntNet s’inscrit dans une logique complémentaire à celle du module \gls{quadrige}. 
 Alors que l’import \gls{quadrige} vise des données institutionnelles, produites dans un cadre scientifique structuré 
@@ -382,6 +388,7 @@ est également entièrement décrit dans ce fichier.
 
 
 Le parser implémente un mécanisme de configuration par défaut.
+
 En l’absence de fichier \texttt{api2gn\_config.toml}, ou si celui-ci est incomplet, 
 un jeu de valeurs par défaut intégrées au code est utilisé.
 Ce comportement permet de garantir le fonctionnement du module en environnement de test 
@@ -396,6 +403,9 @@ Le parser Pl@ntNet met également en œuvre un mécanisme d’auto-création des
 Lors de la première exécution, le parser vérifie l’existence de la source, du cadre d’acquisition et du jeu de données associés à Pl@ntNet.
 En l’absence de ces éléments, ils sont automatiquement créés en base, dans le respect du modèle GeoNature.
 Ce mécanisme permet de rendre le parser autonome et de limiter les opérations manuelles d’initialisation lors du déploiement.
+
+La structuration des données repose sur le standard Darwin Core, tel que défini par le GBIF\footnote{\href{https://www.gbif.org/fr/darwin-core}{Présentation du format Darwin Core}}.
+
 
 Cette stratégie renforce la robustesse du module, notamment en phase de test ou de développement, 
 tout en incitant à une configuration explicite en environnement de production. 
