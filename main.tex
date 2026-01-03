@@ -97,7 +97,7 @@
 
 
 % Correction du warning fancyhdr
-\setlength{\headsep}{12pt}  % valeur par défaut : 25pt
+\setlength{\headsep}{22pt}  % valeur par défaut : 25pt
 \setlength{\headheight}{42pt}
 \setlength{\footskip}{34pt}
 \addtolength{\topmargin}{-2pt}
@@ -117,7 +117,7 @@
 \titleformat{\chapter}
   {\Huge\bfseries\color{ENIBblue}}
   {\thechapter.\ }{0.75em}{}
-\titlespacing*{\chapter}{0pt}{1em}{2em}
+\titlespacing*{\chapter}{0pt}{1em}{1.2em}
 
 % Amélioration : éviter page blanche inutile avant le premier chapitre
 \preto\chapter{%
@@ -130,10 +130,12 @@
 \newcommand{\BlueChapter}[1]{%
   \clearpage
   \phantomsection
+  \vspace*{0.6cm} % <-- ESPACE ENTRE L’EN-TÊTE ET LE TITRE
   {\Huge\bfseries\color{ENIBblue}#1}\par
   \addcontentsline{toc}{chapter}{#1}%
-  \vspace{1em}
+  \vspace{1.5em}
 }
+
 
 % ===== SECTIONS =====
 \titleformat{\section}
@@ -149,9 +151,10 @@
   {\thesubsection.\ }{0.75em}{}
 \titlespacing*{\subsection}{0pt}{1em}{0.8em}
 
-\setlength{\textfloatsep}{1.5em}
-\setlength{\floatsep}{1.2em}
-\setlength{\intextsep}{1.2em}
+\setlength{\textfloatsep}{2em}
+\setlength{\floatsep}{1.6em}
+\setlength{\intextsep}{1.6em}
+
 
 
     
@@ -161,6 +164,11 @@
             citecolor=ENIBblue]{hyperref}
 
 \usepackage[normalem]{ulem} % pour \uline sans casser \emph
+
+\usepackage{needspace}
+\pretocmd{\section}{\needspace{5\baselineskip}}{}{}
+\pretocmd{\subsection}{\needspace{4\baselineskip}}{}{}
+
 
 \let\oldhref\href
 \renewcommand{\href}[2]{\oldhref{#1}{\uline{#2}}}
@@ -221,7 +229,7 @@
 
         \begin{minipage}{0.5\textwidth}
             \hspace{0.2cm}
-            \includegraphics[height=1.7cm]{images/logos/logo_DEAL.jpg}
+            \includegraphics[height=1.7cm]{images/logos/logo_DEAL.png}
         \end{minipage}
         \begin{minipage}{0.48\textwidth}
             \raggedleft
@@ -283,7 +291,12 @@
     \fancyhf{}
 
     \fancyhead[L]{\includegraphics[height=0.9cm]{images/logos/Enib_inp_2025.png}}
-    \fancyhead[R]{\includegraphics[height=0.9cm]{images/logos/logo_DEAL.jpg}}
+    \fancyhead[R]{%
+  \raisebox{-0.2\height}{%
+    \includegraphics[height=1.6cm]{images/logos/logo_DEAL.png}%
+  }%
+}
+
 
     \fancyfoot[C]{\color{ENIBblue}\rule{\textwidth}{0.4pt}}
     \fancyfoot[L]{\small\color{ENIBblue} \StudentEmail}
