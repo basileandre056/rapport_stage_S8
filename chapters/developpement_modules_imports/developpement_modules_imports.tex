@@ -297,168 +297,166 @@ publication du module dans le catalogue officiel des extensions GeoNature.
 \section{Extension du module \gls{api2gn} pour l’intégration des données Pl@ntNet}
 
 \subsection{Rôle du module \gls{api2gn} dans l’écosystème GeoNature}
-Le module \texttt{\gls{api2gn}} constitue une brique transversale au sein de l’écosystème GeoNature.
-Contrairement aux modules d’import classiques, fondés sur des fichiers intermédiaires produits manuellement, 
-\texttt{\gls{api2gn}} a été conçu pour permettre l’intégration directe et automatisée de données issues de sources externes, 
-exposées via des services web (\gls{api} REST, flux JSON, services WFS).
 
-Son principe repose sur une séparation claire entre :
-\begin{itemize}
-\item le \textbf{cœur du moteur d’import}, chargé de l’orchestration des appels \gls{api}, de la gestion des erreurs, de 
-l’historisation et de l’insertion en base ;
-\item des \textbf{parseurs spécialisés}, responsables de la transformation des données sources vers le modèle de la table 
-\textit{Synthèse} de GeoNature.
-\end{itemize}
+Le module \texttt{\gls{api2gn}} constitue une brique transversale au sein de l’écosystème GeoNature. 
+Il se distingue des modules d’import classiques, généralement fondés sur des fichiers intermédiaires produits manuellement, 
+en permettant l’intégration directe et automatisée de données issues de sources externes.
 
-Chaque parseur implémente ainsi une logique métier propre à une source de données donnée, tout en 
-s’appuyant sur un socle commun fourni par \texttt{\gls{api2gn}} : gestion des géométries, résolution des nomenclatures, validation du 
-mapping, historisation des imports et intégration dans les mécanismes de sécurité de GeoNature.
+Ces sources sont exposées via des services web, tels que des \gls{api} REST, des flux JSON structurés ou des services WFS. 
+Le module a été conçu pour répondre à des besoins d’automatisation et de récurrence, tout en respectant les contraintes 
+du modèle de données du \gls{sinp} et de la table \textit{Synthèse} de GeoNature.
 
-Dans ce cadre, le module \texttt{\gls{api2gn}} apparaît comme un outil particulièrement adapté à l’intégration de données issues de 
-plateformes participatives ou ouvertes, telles que Pl@ntNet, dont les volumes, la fréquence de mise à jour et les modalités d’accès 
-se distinguent fortement des bases institutionnelles comme \gls{quadrige}.
+Son fonctionnement repose sur une séparation claire entre deux niveaux. 
+Le premier correspond au cœur du moteur d’import, chargé de l’orchestration des appels aux \gls{api}, 
+de la gestion des erreurs, de l’historisation des opérations et de l’insertion des données en base. 
+Le second niveau est constitué de parseurs spécialisés, responsables de la transformation des données sources 
+vers le modèle attendu par GeoNature.
+
+Chaque parseur implémente ainsi une logique métier propre à une source donnée, tout en s’appuyant sur un socle commun. 
+Ce socle prend en charge la gestion des géométries, la résolution des nomenclatures, la validation des mappings, 
+l’historisation des imports et l’intégration aux mécanismes de sécurité de GeoNature.
+
+Dans ce contexte, le module \texttt{\gls{api2gn}} apparaît particulièrement adapté à l’intégration de données issues 
+de plateformes participatives ou ouvertes, telles que Pl@ntNet. 
+Ces plateformes se caractérisent par des volumes importants, une fréquence de mise à jour élevée 
+et des modalités d’accès très différentes de celles des bases institutionnelles comme \gls{quadrige}.
 
 \subsection{Objectifs et positionnement du parser Pl@ntNet}
 
-Le développement du parser Pl@ntNet s’inscrit dans une logique complémentaire à celle du module \gls{quadrige}.
-Alors que l’import \gls{quadrige} vise des données institutionnelles, fortement structurées et produites dans un 
-cadre scientifique contrôlé, les données Pl@ntNet relèvent d’un contexte participatif, caractérisé par :
-\begin{itemize}
-\item une production massive et continue d’observations ;
-\item une grande hétérogénéité des contributeurs ;
-\item une qualité variable des identifications taxonomiques ;
-\item une forte dépendance à des mécanismes de validation automatisés.
-\end{itemize}
+Le développement du parser Pl@ntNet s’inscrit dans une logique complémentaire à celle du module \gls{quadrige}. 
+Alors que l’import \gls{quadrige} vise des données institutionnelles, produites dans un cadre scientifique structuré 
+et contrôlé, les données issues de Pl@ntNet relèvent d’un contexte participatif.
 
-L’objectif du parser Pl@ntNet n’était donc pas de proposer une intégration exhaustive et aveugle de l’ensemble 
-des observations disponibles, mais de mettre en place une chaîne d’import :
-\begin{itemize}
-\item \textbf{automatisée}, afin de pouvoir être exécutée régulièrement ;
-\item \textbf{configurable}, pour adapter le périmètre d’import aux besoins territoriaux ;
-\item \textbf{sélective}, en appliquant des filtres taxonomiques, spatiaux et temporels ;
-\item \textbf{rigoureuse}, en imposant un contrôle strict de la compatibilité avec le référentiel TAXREF.
-\end{itemize}
+Ce type de données se caractérise par une production massive et continue d’observations, 
+une grande hétérogénéité des contributeurs et une variabilité importante de la qualité des identifications. 
+La fiabilité des données repose en grande partie sur des mécanismes automatisés de reconnaissance et de validation.
 
-Le parser Pl@ntNet a ainsi été conçu comme un cas d’étude illustrant une stratégie d’intégration différente de 
-celle retenue pour \gls{quadrige} : une automatisation poussée, compensée par des mécanismes renforcés de validation et de traçabilité.
+Dans ce contexte, l’objectif du parser Pl@ntNet n’était pas de proposer une intégration exhaustive 
+de l’ensemble des observations disponibles. 
+L’enjeu consistait plutôt à mettre en place une chaîne d’import automatisée mais maîtrisée, 
+capable de fonctionner régulièrement, tout en conservant un niveau élevé d’exigence sur la qualité des données intégrées.
 
+Le parser a ainsi été conçu comme un outil configurable et sélectif. 
+Il permet d’appliquer des filtres spatiaux, temporels et taxonomiques, 
+et impose un contrôle strict de la compatibilité des données avec le référentiel TAXREF.
 
+Cette approche illustre une stratégie d’intégration différente de celle retenue pour les données \gls{quadrige}. 
+Elle repose sur une automatisation plus poussée, compensée par des mécanismes renforcés de validation et de traçabilité.
 
 \subsection{Architecture technique et principes de conception}
 
-
-Sur le plan technique, le parser Pl@ntNet repose sur l’architecture standard des parseurs \texttt{\gls{api2gn}}.
+Sur le plan technique, le parser Pl@ntNet repose sur l’architecture standard des parseurs du module \texttt{\gls{api2gn}}. 
 Il hérite directement de la classe \texttt{JSONParser}, elle-même dérivée de la classe générique \texttt{Parser}. 
-Cette hiérarchie permet de mutualiser les fonctionnalités communes à l’ensemble des sources JSON, tout en laissant 
-au parser la responsabilité de la logique métier spécifique à Pl@ntNet.
+Cette hiérarchie permet de mutualiser l’ensemble des fonctionnalités communes aux sources de données exposées sous forme JSON.
 
-Le flux général d’exécution peut être résumé ainsi :
-\begin{enumerate}
-\item initialisation du parser et chargement de la configuration ;
-\item construction des requêtes vers l’\gls{api} Pl@ntNet ;
-\item récupération paginée des occurrences ;
-\item transformation et normalisation des données ;
-\item résolution taxonomique ;
-\item insertion des observations valides dans la table \textit{Synthèse}.
-\end{enumerate}
+Le parser conserve toutefois la responsabilité de la logique métier spécifique à Pl@ntNet. 
+Le déroulement général d’une exécution suit une séquence clairement définie. 
+Après l’initialisation du parser et le chargement de la configuration, 
+les requêtes vers l’\gls{api} Pl@ntNet sont construites. 
+Les observations sont ensuite récupérées de manière paginée, puis transformées et normalisées. 
+Une phase de résolution taxonomique est alors appliquée, avant l’insertion des observations valides 
+dans la table \textit{Synthèse} de GeoNature.
 
-Le parser a été conçu selon un principe fondamental : \textbf{aucune logique métier n’est codée en dur}.
-Les paramètres d’appel à l’\gls{api}, les filtres appliqués, le mapping des champs et les règles de validation sont intégralement 
-pilotés par la configuration, ce qui permet d’adapter le comportement du parser sans modifier le code Python.
+Un principe fondamental a guidé la conception du parser. 
+Aucune logique métier n’est codée en dur dans le code Python. 
+Les paramètres d’appel à l’\gls{api}, les filtres appliqués, le mapping des champs 
+et les règles de validation sont intégralement définis dans la configuration.
 
-Cette approche favorise la maintenabilité du module et facilite son appropriation par d’autres structures souhaitant exploiter 
-les données Pl@ntNet sur des territoires ou des périmètres différents.
-
-
+Ce choix favorise la maintenabilité du module et facilite son adaptation à d’autres contextes territoriaux, 
+sans remise en cause de l’architecture existante.
 
 \subsection{Configuration dynamique et pilotage par fichier TOML}
 
+L’un des apports majeurs du travail réalisé concerne la gestion de la configuration du parser Pl@ntNet. 
+Celui-ci s’appuie sur un fichier \texttt{TOML}, chargé via le mécanisme standard de configuration de GeoNature.
+
+Ce fichier permet de définir de manière centralisée les paramètres d’accès à l’\gls{api} Pl@ntNet, 
+les filtres taxonomiques éventuels, les bornes temporelles d’extraction et l’emprise géographique ciblée, 
+définie sous la forme d’un polygone GeoJSON. 
+Le mapping entre les champs fournis par Pl@ntNet et ceux de la table \textit{Synthèse} 
+est également entièrement décrit dans ce fichier.
 
 
-L’un des apports majeurs du travail réalisé réside dans la mise en place d’un système de configuration 
-entièrement externalisé, basé sur un fichier \texttt{TOML} chargé via le mécanisme standard de configuration de GeoNature.
 
-Ce fichier permet de définir de manière centralisée :
-\begin{itemize}
-\item les paramètres d’accès à l’\gls{api} Pl@ntNet (URL, clé \gls{api}) ;
-\item les filtres taxonomiques (liste d’espèces ciblées ou absence de filtrage) ;
-\item les bornes temporelles d’extraction ;
-\item l’emprise géographique, définie par un polygone GeoJSON ;
-\item les règles de mapping entre les champs Pl@ntNet et la table \textit{Synthèse}.
-\end{itemize}
+Le parser implémente un mécanisme de configuration par défaut.
+En l’absence de fichier \texttt{api2gn\_config.toml}, ou si celui-ci est incomplet, 
+un jeu de valeurs par défaut intégrées au code est utilisé.
+Ce comportement permet de garantir le fonctionnement du module en environnement de test 
+et de limiter les risques de blocage en production, tout en signalant explicitement 
+les incohérences via les logs.
 
-Le parser implémente un mécanisme de \textit{fallback} permettant de fonctionner même en l’absence 
-de configuration complète.
-Dans ce cas, des valeurs par défaut sont appliquées, accompagnées de messages d’avertissement explicites 
-dans les logs. Cette stratégie garantit la robustesse du module en environnement de test ou de développement, 
-tout en incitant à une configuration explicite en production.
+Une route API dédiée permet de consulter la configuration effective chargée par GeoNature.
+Cette route applique une validation métier non bloquante, signalant les incohérences potentielles (dates inversées, géométrie invalide, mapping incorrect) sans empêcher l’exécution du parser.
+Ce choix vise à favoriser la transparence et l’autonomie des administrateurs, tout en conservant un haut niveau de robustesse.
 
-Ce choix de conception permet également d’envisager, à terme, une interface d’administration graphique dédiée à 
-la gestion de ces paramètres, sans remise en cause de l’architecture existante.
+Le parser Pl@ntNet met également en œuvre un mécanisme d’auto-création des métadonnées nécessaires à l’intégration dans GeoNature.
+Lors de la première exécution, le parser vérifie l’existence de la source, du cadre d’acquisition et du jeu de données associés à Pl@ntNet.
+En l’absence de ces éléments, ils sont automatiquement créés en base, dans le respect du modèle GeoNature.
+Ce mécanisme permet de rendre le parser autonome et de limiter les opérations manuelles d’initialisation lors du déploiement.
+
+Cette stratégie renforce la robustesse du module, notamment en phase de test ou de développement, 
+tout en incitant à une configuration explicite en environnement de production. 
+Elle ouvre également la voie à une future interface d’administration graphique dédiée 
+au pilotage de ces paramètres.
 
 
 
 \subsection{Résolution taxonomique et contrôle de la qualité des données}
 
+La résolution taxonomique constitue l’enjeu central de l’intégration des données Pl@ntNet dans GeoNature. 
+Afin de garantir la cohérence avec le référentiel national TAXREF et les exigences du \gls{sinp}, 
+le parser met en œuvre une chaîne de validation stricte.
 
-La résolution taxonomique constitue l’enjeu central de l’intégration des données Pl@ntNet dans GeoNature.
-Afin de garantir la cohérence avec le référentiel national TAXREF et les exigences du SINP, le parser met en œuvre une chaîne de validation stricte.
+Pour chaque observation, le nom scientifique fourni par l’\gls{api} Pl@ntNet est d’abord normalisé. 
+Les mentions infra-spécifiques et les annotations non standard sont supprimées afin d’améliorer 
+les chances de correspondance avec le référentiel.
 
-Pour chaque observation, le nom scientifique fourni par l’\gls{api} Pl@ntNet est d’abord normalisé afin de supprimer les mentions infra-spécifiques ou les annotations non standard. Le parser tente ensuite de résoudre le \texttt{cd\_nom}
- selon un ordre hiérarchique précis :
-\begin{enumerate}
-\item recherche dans le référentiel TAXREF local de GeoNature ;
-\item en cas d’échec, interrogation du service TAXREF-LD du MNHN ;
-\item vérification de l’existence du \texttt{cd\_nom}
- obtenu dans la base locale.
-\end{enumerate}
+Le parser tente ensuite de résoudre le \texttt{cd\_nom} en interrogeant en priorité le référentiel TAXREF local. 
+En cas d’échec, le service TAXREF-LD du MNHN est sollicité. 
+Le \texttt{cd\_nom} obtenu est enfin vérifié dans la base locale de GeoNature.
 
-Un cache mémoire est utilisé afin d’éviter les résolutions répétées pour un même taxon, ce qui améliore significativement les performances lors des imports volumineux.
+Afin d’optimiser les performances lors des imports volumineux, un cache mémoire des résolutions taxonomiques est utilisé.
+Ce cache permet d’éviter des requêtes répétées vers la base TAXREF locale ou les services TAXREF-LD pour un même nom scientifique, 
+réduisant significativement le temps de traitement.
 
-Le parser fonctionne par défaut en \textbf{mode strict}.
-Dans ce mode, toute observation pour laquelle aucun \texttt{cd\_nom}
- valide ne peut être résolu est rejetée. Ces rejets sont explicitement journalisés, permettant :
-\begin{itemize}
-\item d’identifier les taxons problématiques ;
-\item d’évaluer la qualité globale des données importées ;
-\item d’envisager, le cas échéant, une mise à jour du référentiel TAXREF local.
-\end{itemize}
 
-Ce mécanisme constitue un compromis entre automatisation et exigence de qualité, indispensable dans le contexte des données participatives.
-
+Par défaut, le parser fonctionne en mode strict. 
+Toute observation pour laquelle aucun \texttt{cd\_nom} valide ne peut être résolu est rejetée. 
+Ces rejets sont systématiquement journalisés, ce qui permet d’identifier les taxons problématiques 
+et d’évaluer la qualité globale des données importées.
 
 \subsection{Traçabilité, sécurité et automatisation des imports}
 
-Le parser Pl@ntNet s’intègre pleinement aux mécanismes de traçabilité fournis par \texttt{\gls{api2gn}}.
-Chaque exécution est historisée dans une table dédiée, permettant de conserver :
-\begin{itemize}
-\item la date du dernier import ;
-\item le nombre d’observations importées lors de la dernière exécution ;
-\item le volume total d’observations intégrées ;
-\item une fréquence d’exécution planifiée, le cas échéant.
-\end{itemize}
+Le parser Pl@ntNet s’intègre pleinement aux mécanismes de traçabilité fournis par le module \texttt{\gls{api2gn}}. 
+Chaque exécution est historisée dans une table dédiée. 
+Cette historisation permet de conserver la date du dernier import, 
+le nombre d’observations intégrées et le volume total de données importées.
 
-Un mode \textit{dry-run} est systématiquement disponible. Il permet de simuler un import sans insertion en base, ce qui constitue un outil essentiel pour :
-\begin{itemize}
-\item tester une nouvelle configuration ;
-\item évaluer l’impact d’un changement de périmètre ;
-\item analyser la qualité des données avant intégration effective.
-\end{itemize}
+Un mode \textit{dry-run} est systématiquement disponible. 
+Il permet de simuler un import sans insertion en base. 
+Ce mode constitue un outil essentiel pour tester une nouvelle configuration, 
+évaluer l’impact d’un changement de périmètre ou analyser la qualité des données 
+avant une intégration effective.
 
-Enfin, le module est compatible avec le système de tâches planifiées de GeoNature, permettant d’envisager des imports périodiques automatisés, tout en conservant un contrôle fin sur leur déclenchement et leur suivi.
-
-
+Le module intègre un mécanisme d’automatisation basé sur Celery.
+Les parseurs peuvent être configurés avec une fréquence d’exécution stockée en base.
+Un processus périodique vérifie les dates de dernier import et déclenche automatiquement les imports lorsque la 
+fréquence définie est atteinte. Il devient ainsi possible d’envisager des imports périodiques automatisés, 
+tout en conservant un contrôle fin sur leur déclenchement et leur suivi.
 
 \subsection{Apports du travail réalisé}
 
+Le développement du parser Pl@ntNet a permis de démontrer la capacité de GeoNature 
+à intégrer des données participatives de manière automatisée, 
+tout en respectant les exigences du \gls{sinp} en matière de qualité, de traçabilité 
+et de cohérence taxonomique.
 
-Le développement du parser Pl@ntNet a permis de démontrer la capacité de GeoNature à intégrer des données participatives de manière automatisée, tout en respectant les exigences du SINP en matière de qualité, de traçabilité et de cohérence taxonomique.
+Au-delà du cas spécifique de Pl@ntNet, ce travail met en évidence la pertinence 
+de l’architecture \texttt{\gls{api2gn}} pour l’intégration de sources de données hétérogènes. 
+Il souligne également l’intérêt d’une configuration externalisée 
+pour favoriser la réutilisation du module et son adaptation à différents contextes.
 
-Au-delà du cas spécifique de Pl@ntNet, ce travail met en évidence :
-\begin{itemize}
-\item la pertinence de l’architecture \texttt{\gls{api2gn}} pour l’intégration de sources hétérogènes ;
-\item l’intérêt d’une configuration externalisée pour favoriser la réutilisation et l’adaptabilité ;
-\item la complémentarité des stratégies d’import entre données institutionnelles et participatives.
-\end{itemize}
-
-Le parser Pl@ntNet constitue ainsi un prototype fonctionnel et robuste, susceptible d’être étendu à d’autres sources de données ouvertes, et de contribuer à l’enrichissement progressif de la base GeoNature, notamment pour les taxons terrestres peu couverts par les réseaux institutionnels traditionnels.
+Le parser Pl@ntNet constitue ainsi un prototype fonctionnel et robuste. 
+Il ouvre la voie à l’intégration d’autres sources de données ouvertes 
+et contribue à l’enrichissement progressif de la base GeoNature, 
+notamment pour les taxons terrestres peu couverts par les réseaux institutionnels traditionnels.
