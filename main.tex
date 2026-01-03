@@ -26,6 +26,13 @@
 \usepackage{fancyhdr}
 \usepackage{color}
 \usepackage{tocloft}
+
+% Sommaire compact
+\setlength{\cftbeforechapskip}{0.3em}
+\setlength{\cftbeforesecskip}{0.1em}
+\setlength{\cftbeforesubsecskip}{0pt}
+
+
 \usepackage{float}
 
 % --- Glossaire ---
@@ -70,9 +77,22 @@
 }
 
 
-\onehalfspacing
+\setstretch{1.55}
 
 
+
+% Empêcher l'interligne d'affecter les titres
+\usepackage{etoolbox}
+\makeatletter
+\pretocmd{\chapter}{\singlespacing}{}{}
+\pretocmd{\section}{\singlespacing}{}{}
+\pretocmd{\subsection}{\singlespacing}{}{}
+\makeatother
+
+
+
+\setlength{\parskip}{0.6em}
+\setlength{\parindent}{0pt}
 
 
 
@@ -97,7 +117,7 @@
 \titleformat{\chapter}
   {\Huge\bfseries\color{ENIBblue}}
   {\thechapter.\ }{0.75em}{}
-\titlespacing*{\chapter}{0pt}{0pt}{2em}
+\titlespacing*{\chapter}{0pt}{1em}{2em}
 
 % Amélioration : éviter page blanche inutile avant le premier chapitre
 \preto\chapter{%
@@ -119,7 +139,7 @@
 \titleformat{\section}
   {\large\bfseries\color{black}}
   {\thesection.\ }{0.75em}{}
-\titlespacing*{\section}{0pt}{1em}{0.8em}
+\titlespacing*{\section}{0pt}{1.5em}{1.2em}
 
 
 
@@ -127,7 +147,12 @@
 \titleformat{\subsection}
   {\normalsize\bfseries\color{black}}
   {\thesubsection.\ }{0.75em}{}
-\titlespacing*{\subsection}{0pt}{0.5em}{0.5em}
+\titlespacing*{\subsection}{0pt}{1em}{0.8em}
+
+\setlength{\textfloatsep}{1.5em}
+\setlength{\floatsep}{1.2em}
+\setlength{\intextsep}{1.2em}
+
 
     
 \usepackage[colorlinks=true,
@@ -139,6 +164,8 @@
 
 \let\oldhref\href
 \renewcommand{\href}[2]{\oldhref{#1}{\uline{#2}}}
+
+
 
 
 % ------------------------------------------
@@ -153,8 +180,10 @@
 
 
 % Style du titre de la table des matières
-\renewcommand{\contentsname}{\color{ENIBblue}\Huge\bfseries Table des matières}
+\renewcommand{\contentsname}{\color{ENIBblue}\LARGE\bfseries Table des matières}
 
+\setlength{\cftbeforetoctitleskip}{0.5em}
+\setlength{\cftaftertoctitleskip}{1em}
 % Style du titre de la liste des figures
 \renewcommand{\listfigurename}{\color{ENIBblue}\Huge\bfseries Liste des figures}
 
@@ -297,11 +326,16 @@
 % ------------------------------------------
 \clearpage        % force un saut de page
 \phantomsection   % assure une bonne ancre pour hyperref
+\begingroup
+\small
 \tableofcontents
+\endgroup
 \clearpage
 
 % GLOSSAIRE
 \BlueChapter{Glossaire}
+
+\vspace{1.2em}
 
 \begingroup
 \setlength{\LTpre}{0pt}
@@ -403,3 +437,5 @@
 
 
 \end{document}
+
+
