@@ -21,7 +21,7 @@ institutionnellement. Parmi celles-ci, le système d’information \gls{quadrige
 \gls{quadrige} regroupe un volume important de données environnementales et biologiques collectées en milieu marin, issues de programmes 
 de surveillance, d’observation et de recherche conduits sur le long terme.
 
-L’ouverture récente d’une \gls{api} GraphQL par l’Ifremer constitue à ce titre une évolution majeure. Elle permet une interrogation 
+L’ouverture récente d’une \gls{api} \gls{graphql} par l’Ifremer constitue à ce titre une évolution majeure. Elle permet une interrogation 
 directe, fine et structurée des données de \gls{quadrige}, en ciblant précisément les programmes, les zones géographiques, les périodes 
 temporelles et les types d’observations d’intérêt. Cette évolution ouvre la voie à une exploitation plus systématique de ces données 
 par des acteurs institutionnels tels que la DEAL, et à leur mobilisation progressive dans le cadre du \gls{sinp}.
@@ -31,10 +31,9 @@ directe et entièrement automatisée des données \gls{quadrige} dans la base Ge
 d’explorer, d’extraire et de préparer ces données de manière structurée, traçable et reproductible. Le module développé interroge 
 l’\gls{api} \gls{quadrige} afin d’identifier les programmes pertinents pour le territoire réunionnais, puis permet d’en extraire les observations 
 associées selon des critères définis par l’utilisateur.
-
 Les résultats de ces extractions ne prennent pas la forme de fichiers immédiatement importables dans GeoNature. 
 Pour chaque programme sélectionné, le module génère une archive compressée contenant plusieurs éléments complémentaires : 
-un fichier CSV brut correspondant aux données extraites, un fichier JSON décrivant précisément les filtres appliqués lors 
+un fichier \gls{csv} brut correspondant aux données extraites, un fichier \gls{json} décrivant précisément les filtres appliqués lors 
 de l’appel à l’\gls{api}, ainsi qu’un fichier README documentant le déroulement de l’export et les éventuelles anomalies rencontrées. 
 Le module conserve également un accès aux trois derniers exports réalisés afin d’en faciliter la consultation et la réutilisation.
 
@@ -93,7 +92,7 @@ administrateurs, conformément aux pratiques habituelles de contrôle des import
 
 Le module \gls{quadrige} développé durant le stage a été conçu comme un module externe à GeoNature, 
 respectant l’architecture recommandée par le projet tout en prenant en compte les contraintes 
-spécifiques de l’\gls{api} GraphQL mise à disposition par l’Ifremer. L’objectif principal était de 
+spécifiques de l’\gls{api} \gls{graphql} mise à disposition par l’Ifremer. L’objectif principal était de 
 proposer une chaîne d’extraction robuste, traçable et exploitable, sans perturber le cœur 
 applicatif de GeoNature ni les processus existants de gestion des données naturalistes.
 
@@ -102,7 +101,7 @@ applicatif de GeoNature ni les processus existants de gestion des données natur
 Le module repose sur une architecture client--serveur classique, intégrée à GeoNature via un 
 \textit{blueprint} Flask côté backend et un module Angular dédié côté frontend.  
 Le backend est responsable de l’ensemble des interactions avec l’\gls{api} \gls{quadrige}, incluant 
-l’authentification, la construction des requêtes GraphQL, le suivi des extractions, la gestion 
+l’authentification, la construction des requêtes \gls{graphql}, le suivi des extractions, la gestion 
 des fichiers produits et l’exposition de routes REST sécurisées.
 
 Le frontend se limite volontairement au pilotage des opérations : sélection des paramètres, 
@@ -123,7 +122,7 @@ Le module s’appuie sur un fichier de configuration dédié, chargé côté bac
 standard de GeoNature (\texttt{geonature/config}). Ce fichier centralise l’ensemble des paramètres 
 techniques nécessaires au fonctionnement du module, notamment :
 \begin{itemize}
-  \item l’URL de l’\gls{api} GraphQL \gls{quadrige} ;
+  \item l’URL de l’\gls{api} \gls{graphql} \gls{quadrige} ;
   \item le jeton d’authentification requis pour les appels à l’\gls{api} ;
   \item des paramètres métiers optionnels, tels que les localisations suggérées ou les champs 
   extractibles.
@@ -138,7 +137,7 @@ global.
 \subsection{Extraction des programmes \gls{quadrige}}
 
 La première étape du processus consiste à identifier les programmes \gls{quadrige} pertinents pour un 
-territoire donné. Cette extraction repose sur une requête GraphQL spécifique fournie par l’\gls{api} 
+territoire donné. Cette extraction repose sur une requête \gls{graphql} spécifique fournie par l’\gls{api} 
 \gls{quadrige}, filtrée à partir d’un préfixe de \textit{monitoring location} correspondant au périmètre 
 géographique ciblé.
 
@@ -161,7 +160,7 @@ antérieurs.
 \subsection{Extraction des données et gestion asynchrone des traitements}
 
 L’extraction des données repose sur un mécanisme asynchrone propre à l’\gls{api} \gls{quadrige}. Pour chaque 
-programme sélectionné, une requête GraphQL est soumise afin de lancer un job d’extraction côté 
+programme sélectionné, une requête \gls{graphql} est soumise afin de lancer un job d’extraction côté 
 serveur Ifremer. Le module implémente un mécanisme de \textit{polling} permettant de suivre 
 l’évolution de l’état de chaque extraction (PENDING, RUNNING, SUCCESS, WARNING, ERROR).
 
@@ -182,7 +181,7 @@ traçabilité.
 Un soin particulier a été apporté à la gestion des états et des erreurs tout au long du processus 
 d’extraction. Les situations suivantes sont explicitement prises en compte :
 \begin{itemize}
-  \item erreurs de communication avec l’\gls{api} GraphQL ;
+  \item erreurs de communication avec l’\gls{api} \gls{graphql} ;
   \item délais excessifs lors des extractions longues ;
   \item incohérences ou réponses partielles retournées par l’\gls{api} ;
   \item extractions aboutissant à des avertissements ou à l’absence de données.
@@ -302,7 +301,7 @@ Le module \texttt{\gls{api2gn}} constitue une brique transversale au sein de l�
 Il se distingue des modules d’import classiques, généralement fondés sur des fichiers intermédiaires produits manuellement, 
 en permettant l’intégration directe et automatisée de données issues de sources externes.
 
-Ces sources sont exposées via des services web, tels que des \gls{api} REST, des flux JSON structurés ou des services WFS. 
+Ces sources sont exposées via des services web, tels que des \gls{apirest}, des flux JSON structurés ou des services WFS. 
 Le module a été conçu pour répondre à des besoins d’automatisation et de récurrence, tout en respectant les contraintes 
 du modèle de données du \gls{sinp} et de la table \textit{Synthèse} de GeoNature.
 
@@ -338,7 +337,7 @@ capable de fonctionner régulièrement, tout en conservant un niveau élevé d�
 
 Le parser a ainsi été conçu comme un outil configurable et sélectif. 
 Il permet d’appliquer des filtres spatiaux, temporels et taxonomiques, 
-et impose un contrôle strict de la compatibilité des données avec le référentiel TAXREF.
+et impose un contrôle strict de la compatibilité des données avec le référentiel \gls{taxref}.
 
 Cette approche illustre une stratégie d’intégration différente de celle retenue pour les données \gls{quadrige}. 
 Elle repose sur une automatisation plus poussée, compensée par des mécanismes renforcés de validation et de traçabilité.
@@ -412,11 +411,11 @@ Les mentions infra-spécifiques et les annotations non standard sont supprimées
 les chances de correspondance avec le référentiel.
 
 Le parser tente ensuite de résoudre le \texttt{cd\_nom} en interrogeant en priorité le référentiel TAXREF local. 
-En cas d’échec, le service TAXREF-LD du MNHN est sollicité. 
+En cas d’échec, le service \gls{taxrefld} du \gls{mnhn} est sollicité. 
 Le \texttt{cd\_nom} obtenu est enfin vérifié dans la base locale de GeoNature.
 
 Afin d’optimiser les performances lors des imports volumineux, un cache mémoire des résolutions taxonomiques est utilisé.
-Ce cache permet d’éviter des requêtes répétées vers la base TAXREF locale ou les services TAXREF-LD pour un même nom scientifique, 
+Ce cache permet d’éviter des requêtes répétées vers la base TAXREF locale ou les services \gls{taxrefld} pour un même nom scientifique, 
 réduisant significativement le temps de traitement.
 
 
