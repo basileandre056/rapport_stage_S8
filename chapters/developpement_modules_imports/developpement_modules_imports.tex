@@ -104,6 +104,7 @@ spécifiques de l’\gls{api} \gls{graphql} mise à disposition par l’Ifremer.
 proposer une chaîne d’extraction robuste, traçable et exploitable, sans perturber le cœur 
 applicatif de GeoNature ni les processus existants de gestion des données naturalistes.
 
+
 \subsection{Architecture générale et découplage frontend/backend}
 
 Le module repose sur une architecture client--serveur classique, intégrée à GeoNature via un 
@@ -165,6 +166,13 @@ Les métadonnées associées à chaque extraction (localisation, horodatage, fil
 sauvegardées afin de permettre la reprise des extractions et la consultation des résultats 
 antérieurs.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/extraction_programs_flow.png}
+    \caption{Schéma fonctionnel des échanges de données entre GeoNature et le système Quadrige lors de l'extraction des programmes}
+    \label{fig:ui-program-list}
+\end{figure}
+
 \subsection{Extraction des données et orchestration des traitements asynchrones}
 
 L’extraction des données repose sur un mécanisme asynchrone propre à l’\gls{api} \gls{quadrige}. Pour chaque 
@@ -199,6 +207,17 @@ Chaque extraction génère un retour structuré indiquant son statut, les averti
 et les liens vers les fichiers produits. Ces informations sont transmises au frontend afin de 
 permettre à l’utilisateur d’identifier rapidement les extractions exploitables et celles 
 nécessitant une vérification.
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/extraction_data_flow.png}
+    \caption{Schéma fonctionnel des échanges de données entre GeoNature et le système Quadrige lors de l'extraction des données des programmes}
+    \label{fig:ui-program-list}
+\end{figure}
+
+
 
 \subsection{Interface utilisateur et pilotage des extractions}
 
