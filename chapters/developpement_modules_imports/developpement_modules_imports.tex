@@ -435,6 +435,12 @@ tout en incitant à une configuration explicite en environnement de production.
 Elle ouvre également la voie à une future interface d’administration graphique dédiée 
 au pilotage de ces paramètres.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/plantnet_data_flow.png}
+    \caption{Schéma fonctionnel des échanges de données entre Géonature et Pl@ntnet}
+    \label{fig:ui-program-list}
+\end{figure}
 
 
 \subsection{Résolution taxonomique et contrôle de la qualité des données}
@@ -460,6 +466,9 @@ Par défaut, le parser fonctionne en mode strict.
 Toute observation pour laquelle aucun \texttt{cd\_nom} valide ne peut être résolu est rejetée. 
 Ces rejets sont systématiquement journalisés, ce qui permet d’identifier les taxons problématiques 
 et d’évaluer la qualité globale des données importées.
+
+
+
 
 \subsection{Traçabilité, sécurité et automatisation des imports}
 
