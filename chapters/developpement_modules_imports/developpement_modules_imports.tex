@@ -166,12 +166,44 @@ Les métadonnées associées à chaque extraction (localisation, horodatage, fil
 sauvegardées afin de permettre la reprise des extractions et la consultation des résultats 
 antérieurs.
 
+La Figure~\ref{fig:data-flow-program-extraction} illustre le cycle complet d’extraction des programmes
+Quadrige, depuis la sélection d’un périmètre géographique par l’administrateur
+jusqu’à la mise à disposition des fichiers CSV exploitables dans GeoNature.
+Elle met en évidence le fonctionnement asynchrone de l’API Quadrige
+et le rôle du backend GeoNature dans la transformation et le filtrage des résultats retournés.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/extraction_programs_flow.png}
     \caption{Schéma fonctionnel des échanges de données entre GeoNature et le système Quadrige lors de l'extraction des programmes}
-    \label{fig:ui-program-list}
+    \label{fig:data-flow-program-extraction}
 \end{figure}
+
+L’intérêt principal de ce schéma réside dans la manière dont sont traités
+les résultats retournés par l’API Quadrige lors de l’extraction des programmes.
+En effet, la requête GraphQL adressée à l’API permet d’identifier les programmes
+possédant au moins une instance associée à la \textit{monitoring location}
+sélectionnée par l’utilisateur. Toutefois, la réponse fournie par Quadrige
+prend la forme d’un fichier CSV contenant l’ensemble des instances de ces programmes,
+y compris celles localisées en dehors du périmètre géographique ciblé.
+
+Un traitement complémentaire est donc nécessaire côté backend GeoNature.
+Le CSV brut généré par l’API est d’abord conservé à des fins de traçabilité,
+puis filtré a posteriori afin de ne retenir que les instances effectivement
+rattachées à la \textit{monitoring location} sélectionnée.
+Ce filtrage repose notamment sur l’analyse des codes de localisation,
+permettant d’exclure les stations hors territoire d’intérêt.
+
+
+À l’issue de ce traitement, un CSV filtré est produit.
+Il ne conserve que les informations pertinentes pour la suite du processus,
+telles que le code du programme, son état, les dates associées,
+l’organisme responsable et les métadonnées nécessaires à la sélection
+des programmes dans l’interface GeoNature.
+Ce fichier constitue la base fonctionnelle utilisée par le frontend
+pour l’affichage, la recherche et la sélection des programmes à extraire.
+
+
 
 \subsection{Extraction des données et orchestration des traitements asynchrones}
 
@@ -214,9 +246,80 @@ nécessitant une vérification.
     \centering
     \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/extraction_data_flow.png}
     \caption{Schéma fonctionnel des échanges de données entre GeoNature et le système Quadrige lors de l'extraction des données des programmes}
-    \label{fig:ui-program-list}
+    \label{fig:data-flow-data-extraction}
 \end{figure}
 
+Ce schéma met en évidence le fonctionnement spécifique
+de la phase d’extraction des données associées aux programmes Quadrige.
+
+Lors de cette phase,
+la \textit{monitoring location} n’est volontairement pas fournie
+dans les filtres transmis par l’utilisateur.
+Elle est automatiquement reprise
+à partir des programmes précédemment extraits
+et filtrés lors de la phase d’extraction des programmes.
+Ce choix permet de garantir
+une cohérence stricte
+entre le périmètre géographique utilisé
+pour identifier les programmes
+et celui appliqué lors de l’extraction des observations.
+
+L’extraction des données est alors exécutée
+programme par programme,
+à partir de la liste sélectionnée par l’utilisateur
+dans l’interface GeoNature.
+Cette liste provient exclusivement
+du CSV filtré produit lors de l’extraction des programmes.
+Seuls les programmes effectivement rattachés
+au territoire d’intérêt
+peuvent ainsi être traités.
+
+Ce chaînage explicite entre les deux phases
+permet d’éviter les incohérences de paramétrage,
+notamment liées à une erreur de localisation.
+Il sécurise l’exécution des extractions
+en s’appuyant sur un périmètre déjà validé,
+plutôt que sur une saisie manuelle répétée des filtres.
+
+
+Plus largement,
+l’intérêt principal de ce schéma réside
+dans la séparation volontaire
+entre la phase d’extraction des programmes
+et celle de l’extraction des données associées.
+Ce découpage ne répond pas uniquement
+à des considérations ergonomiques,
+mais constitue un choix technique structurant du module.
+
+La phase d’extraction des programmes
+permet d’identifier, filtrer et qualifier
+les programmes disponibles sur un territoire donné.
+Elle aboutit à une liste contrôlée,
+exploitable par l’utilisateur,
+qui sert de base à toutes les opérations ultérieures.
+
+La phase d’extraction des données,
+quant à elle,
+s’appuie exclusivement sur cette liste.
+Elle intervient dans un second temps,
+une fois les programmes visualisés,
+analysés et sélectionnés.
+Cette organisation permet à l’utilisateur
+de conserver une maîtrise fine
+sur le périmètre fonctionnel des extractions,
+en pouvant exclure certains programmes
+ou ajuster sa sélection
+avant de lancer des traitements potentiellement longs.
+
+Ainsi, ce schéma illustre une chaîne d’extraction
+progressive et contrôlée,
+dans laquelle la séparation
+entre identification des programmes
+et extraction des données
+constitue un levier essentiel
+de robustesse,
+de cohérence
+et de maîtrise des traitements.
 
 
 \subsection{Interface utilisateur et pilotage des extractions}
@@ -439,7 +542,7 @@ au pilotage de ces paramètres.
     \centering
     \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/plantnet_data_flow.png}
     \caption{Schéma fonctionnel des échanges de données entre Géonature et Pl@ntnet}
-    \label{fig:ui-program-list}
+    \label{fig:data-flow-GeoNature-Plantnet}
 \end{figure}
 
 
@@ -471,7 +574,7 @@ et d’évaluer la qualité globale des données importées.
     \centering
     \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/validation_taxref.png}
     \caption{Schema de la procédure de validation du nom scientifique retourné par Pl@ntnet}
-    \label{fig:ui-program-list}
+    \label{fig:process-validation-TAXREF}
 \end{figure}
 
 
