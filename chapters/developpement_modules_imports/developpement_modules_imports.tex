@@ -26,7 +26,6 @@ directe, fine et structurée des données de \gls{quadrige}, en ciblant précis�
 temporelles et les types d’observations d’intérêt. Le fonctionnement de l’API Quadrige et les modalités d’extraction des données sont décrits 
 dans la documentation officielle mise à disposition par 
 l’Ifremer \href{https://quadrige-core.ifremer.fr/api/extraction/doc?doc=standard&lang=fr&name=result&type=standard}{Documentation officielle de l’API Quadrige}.
-
 Cette évolution ouvre la voie à une exploitation plus systématique de ces données
 par des acteurs institutionnels, et à leur mobilisation progressive dans le cadre du \gls{sinp}.
 
@@ -179,7 +178,7 @@ et le rôle du backend GeoNature dans la transformation et le filtrage des résu
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/extraction_programs_flow.png}
+    \includegraphics[width = 0.9\textwidth]{croped_images/data_flow_schematics/extraction_programs_flow.png}
     \caption{Schéma fonctionnel des échanges de données entre GeoNature et le système Quadrige lors de l'extraction des programmes}
     \label{fig:data-flow-program-extraction}
 \end{figure}
@@ -249,7 +248,7 @@ nécessitant une vérification.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/extraction_data_flow.png}
+    \includegraphics[width = 0.9\textwidth]{croped_images/data_flow_schematics/extraction_data_flow.png}
     \caption{Schéma fonctionnel des échanges de données entre GeoNature et le système Quadrige lors de l'extraction des données des programmes}
     \label{fig:data-flow-data-extraction}
 \end{figure}
@@ -334,14 +333,72 @@ en saisissant un terme dans la barre de recherche, permettant de cibler rapideme
 par son nom ou ses métadonnées associées.
 
 
+La Figure~\ref{fig:ui-program-list} présente l’interface du module
+à l’issue d’une extraction réussie des programmes Quadrige
+pour un périmètre géographique donné.
+Elle correspond à l’état stable du système
+une fois le traitement asynchrone d’extraction terminé
+et les fichiers CSV filtrés générés côté backend.
+
+
+
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/quadrige/extracted_programs.png}
-    \caption{Liste des programmes \gls{quadrige} extraits pour un périmètre géographique donné, tri par mots clés avec la barre de recherche}
+    \includegraphics[width = 0.9\textwidth]{croped_images/quadrige/extracted_programs.png}
+    \caption{Interface de consultation et de sélection des programmes \gls{quadrige}
+      après extraction pour le territoire de La Réunion,
+      incluant les métadonnées des programmes
+      et les outils de recherche et de sélection}
     \label{fig:ui-program-list}
 \end{figure}
 
+L’interface présentée met en évidence plusieurs informations clés
+issues directement du traitement d’extraction des programmes.
+Le bandeau supérieur rappelle le périmètre géographique utilisé,
+via le code de \textit{monitoring location} associé à La Réunion,
+ainsi que le nombre total de programmes extraits pour ce territoire.
+
+La liste centrale prend la forme d’un tableau synthétique,
+dans lequel chaque ligne correspond à un programme Quadrige distinct.
+Pour chacun d’eux sont affichés son identifiant,
+son libellé descriptif,
+sa date de début,
+son état d’activité
+ainsi que les organismes ou responsables associés.
+Ces informations constituent les métadonnées minimales
+nécessaires à une sélection éclairée des programmes à traiter.
+
+
+Compte tenu du nombre potentiellement élevé de programmes retournés,
+un mécanisme de recherche dynamique par mots-clés
+est intégré directement à l’interface.
+La barre de recherche permet de filtrer en temps réel
+la liste affichée
+en s’appuyant sur les métadonnées textuelles des programmes,
+facilitant ainsi l’identification rapide
+d’un programme particulier
+ou d’un ensemble thématique cohérent.
+
+Les programmes sont en outre explicitement sélectionnables,
+via des cases à cocher,
+ce qui permet à l’utilisateur de constituer
+un sous-ensemble maîtrisé de programmes.
+Cette sélection conditionne directement
+la phase suivante d’extraction des données,
+sans nécessiter de nouvelle saisie du périmètre géographique.
+
+
+Cette interface joue ainsi un rôle central dans la chaîne d’extraction.
+Elle constitue le point de transition
+entre la phase d’identification des programmes
+et celle de l’extraction des données associées.
+En matérialisant visuellement
+les résultats du filtrage géographique
+et en permettant une sélection fine,
+elle sécurise les traitements ultérieurs
+et renforce la maîtrise fonctionnelle de l’utilisateur
+avant le lancement d’extractions potentiellement coûteuses.
 
 
 Cette logique de recherche est également appliquée lors des phases de paramétrage. 
@@ -352,17 +409,84 @@ des filtres peuvent être recherchées par saisie textuelle, améliorant l’erg
 erreurs de sélection.
 
 
+La Figure~\ref{fig:ui-program-filter} présente la fenêtre de paramétrage
+utilisée pour définir les filtres appliqués
+lors de l’extraction des programmes Quadrige.
+Cette interface constitue le point d’entrée
+du processus d’extraction,
+en permettant à l’utilisateur de spécifier explicitement
+le périmètre géographique ciblé
+avant toute interrogation de l’API.
+
+
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{images/quadrige/program_filter.png}
-    \caption{Interface de définition des filtres d’extraction des programmes \gls{quadrige}}
+    \includegraphics[width = 0.9\textwidth]{croped_images/quadrige/program_filter.png}
+    \caption{Fenêtre de définition des filtres d’extraction des programmes \gls{quadrige},
+      incluant la sélection de la \textit{monitoring location}}
+
     \label{fig:ui-program-filter}
 \end{figure}
 
 
+Le champ central de cette interface correspond
+au code de \textit{monitoring location},
+paramètre indispensable à l’identification
+des programmes Quadrige.
+La localisation peut être sélectionnée
+de deux manières complémentaires :
+soit en choisissant une valeur
+dans le menu déroulant proposé,
+soit en saisissant directement le code attendu.
 
 
+Ce champ remplit également une fonction de recherche dynamique.
+La liste des localisations proposées
+est filtrée en temps réel
+à partir de la saisie de l’utilisateur.
+Par exemple, la saisie partielle du terme « May »
+restreint immédiatement la liste
+au seul résultat correspondant à Mayotte,
+associé au code \texttt{145-}.
+Ce comportement facilite la navigation
+dans des listes potentiellement étendues
+et limite les erreurs de saisie.
+
+
+Des règles de validation strictes sont appliquées
+avant l’acceptation du filtre.
+La définition d’une \textit{monitoring location}
+est obligatoire :
+le filtre ne peut pas être validé
+tant qu’aucune localisation n’est renseignée.
+De même, le nom associé au filtre
+doit comporter un minimum de trois caractères.
+
+
+Cette contrainte sur la longueur minimale du nom du filtre
+résulte d’un retour d’expérience lors des phases de test.
+Dans une version initiale du module,
+les filtres portant un nom trop court
+étaient acceptés côté interface,
+mais provoquaient un échec silencieux
+de la requête côté API Quadrige.
+L’identification de cette source d’erreur
+a conduit à l’intégration
+d’une règle de validation explicite,
+permettant de prévenir ce type de dysfonctionnement
+dès la saisie utilisateur.
+
+
+L’ensemble de ces mécanismes contribue
+à fiabiliser la phase d’extraction des programmes,
+en empêchant l’envoi de requêtes incomplètes ou invalides
+vers l’API Quadrige.
+L’interface joue ainsi un rôle actif
+dans la prévention des erreurs,
+en traduisant les contraintes techniques de l’API
+en règles de saisie compréhensibles
+et immédiatement vérifiables par l’utilisateur.
 
 
 
@@ -372,13 +496,95 @@ l’administrateur de conserver une maîtrise complète sur les données produit
 intégration dans GeoNature ou dans des plateformes partenaires telles que Borbonica.
 
 
+
+
+La Figure~\ref{fig:ui-extraction-results} présente l’interface de consultation
+des résultats produits par le module Quadrige
+à l’issue des différentes phases d’extraction.
+Cette vue constitue un point central du dispositif,
+en offrant à l’utilisateur un accès direct
+à l’ensemble des fichiers générés,
+avant toute intégration ultérieure dans GeoNature.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/quadrige/extracted_data.png}
-    \caption{Résultats des extractions \gls{quadrige} et accès aux fichiers générés}
+    \includegraphics[width = 0.9\textwidth]{croped_images/quadrige/extracted_data.png}
+    \caption{Interface de consultation des fichiers produits
+      lors des extractions de programmes et de données \gls{quadrige}}
     \label{fig:ui-extraction-results}
 \end{figure}
 
+La première section de l’interface,
+intitulée « Programmes extraits »,
+regroupe les fichiers produits
+lors de la phase d’extraction des programmes.
+Deux fichiers CSV distincts y sont systématiquement proposés.
+
+
+Le premier correspond au CSV brut
+retourné directement par l’API Quadrige.
+Il contient l’ensemble des instances
+associées aux programmes identifiés,
+y compris celles localisées en dehors
+du périmètre géographique ciblé.
+Ce fichier est conservé à des fins de traçabilité
+et permet de documenter fidèlement
+la réponse initiale fournie par l’API.
+
+
+Le second fichier correspond au CSV filtré,
+généré après traitement côté backend GeoNature.
+Ce filtrage permet d’éliminer les instances
+dont le code de \textit{monitoring location}
+ne correspond pas au territoire sélectionné par l’utilisateur.
+Il s’agit du fichier de référence
+utilisé par l’interface
+pour l’affichage et la sélection des programmes.
+
+
+La seconde section de l’interface,
+intitulée « Données extraites »,
+présente les résultats de la phase d’extraction
+des observations associées aux programmes sélectionnés.
+Chaque programme ayant fait l’objet
+d’une extraction aboutie
+donne lieu à la production d’une archive compressée distincte.
+
+
+Chaque archive ZIP correspond
+à un programme Quadrige unique.
+Ce découpage volontaire permet
+de conserver une séparation claire
+entre les jeux de données,
+facilitant leur analyse, leur vérification
+et leur exploitation ultérieure.
+Il permet également de gérer finement
+les erreurs ou avertissements,
+sans compromettre l’ensemble des extractions.
+
+
+Les fichiers générés sont nommés
+selon une convention explicite et homogène.
+Le nom de chaque archive intègre
+le code de la \textit{monitoring location},
+la date et l’heure de l’extraction,
+ainsi que l’identifiant du programme concerné.
+Cette convention permet de retrouver rapidement
+le contexte de production d’un fichier,
+d’en faciliter le tri
+et de garantir une traçabilité complète des traitements réalisés.
+
+
+Cette interface de restitution illustre
+la philosophie générale du module Quadrige :
+les données ne sont pas intégrées automatiquement,
+mais mises à disposition sous une forme structurée,
+documentée et contrôlable.
+L’administrateur peut ainsi consulter les résultats,
+identifier les extractions exploitables
+et conserver une maîtrise complète
+sur les données produites
+avant toute intégration dans GeoNature ou Borbonica.
 
 
 
@@ -537,7 +743,7 @@ dans la table \textit{Synthèse} de GeoNature.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/plantnet_data_flow.png}
+    \includegraphics[width = 0.9\textwidth]{croped_images/data_flow_schematics/plantnet_data_flow.png}
     \caption{Schéma fonctionnel des échanges de données entre Géonature et Pl@ntnet}
     \label{fig:data-flow-GeoNature-Plantnet}
 \end{figure}
@@ -636,7 +842,7 @@ et de validation du nom scientifique appliquée à chaque observation Pl@ntNet.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/validation_taxref.png}
+    \includegraphics[width = 0.9\textwidth]{croped_images/data_flow_schematics/validation_taxref.png}
     \caption{Schema de la procédure de validation du nom scientifique retourné par Pl@ntnet}
     \label{fig:process-validation-TAXREF}
 \end{figure}
