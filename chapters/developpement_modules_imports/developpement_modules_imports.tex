@@ -34,27 +34,18 @@ directe et entièrement automatisée des données \gls{quadrige} dans la base Ge
 d’explorer, d’extraire et de préparer ces données de manière structurée et contrôlée. Le module développé interroge 
 l’\gls{api} \gls{quadrige} afin d’identifier les programmes pertinents pour le territoire réunionnais, puis permet d’en extraire les observations 
 associées selon des critères définis par l’utilisateur.
-Les résultats de ces extractions ne prennent pas la forme de fichiers immédiatement importables dans GeoNature. 
-Pour chaque programme sélectionné, le module génère une archive compressée contenant plusieurs éléments complémentaires : 
-un fichier \gls{csv} brut correspondant aux données extraites, un fichier \gls{json} décrivant précisément les filtres appliqués lors 
-de l’appel à l’\gls{api}, ainsi qu’un fichier README documentant le déroulement de l’export et les éventuelles anomalies rencontrées. 
-Le module conserve également un accès aux trois derniers exports réalisés afin d’en faciliter la consultation et la réutilisation.
 
-En complément de ces archives, le module expose également des liens directs vers les fichiers CSV générés lors de la phase d’extraction 
-des programmes. Deux niveaux de fichiers sont distingués :
+Les résultats des extractions sont volontairement produits sous forme de fichiers intermédiaires,
+et non intégrés directement dans la base GeoNature.
+Ce choix permet de garantir la traçabilité des opérations,
+de documenter précisément les paramètres d’extraction
+et de laisser aux administrateurs un contrôle explicite
+sur les données avant toute intégration ultérieure.
+Les modalités techniques de génération, de filtrage
+et de structuration de ces fichiers
+sont détaillées dans la section consacrée
+à la conception du module.
 
-\begin{itemize}
-  \item un CSV brut issu directement de la réponse de l’\gls{api} \gls{quadrige}, contenant l’ensemble des instances des programmes dont au moins une 
-        occurrence est localisée sur le territoire ciblé ;
-  \item un CSV filtré géographiquement, obtenu par un traitement a posteriori à l’aide de la bibliothèque pandas, permettant d’exclure 
-        les instances dont le code de monitoring location ne correspond pas au territoire d’intérêt (par exemple, codes ne commençant pas 
-        par le préfixe « 126- » pour La Réunion).
-\end{itemize}
-
-
-Ce filtrage complémentaire est nécessaire car, lors de l’extraction des programmes, la requête adressée à l’\gls{api} \gls{quadrige} sélectionne 
-l’ensemble des programmes possédant au moins une instance sur le territoire demandé, mais retourne également les autres instances associées 
-à ces programmes, y compris celles situées hors du périmètre géographique ciblé.
 
 Cette approche intermédiaire répond à plusieurs objectifs. Elle garantit d’une part la traçabilité complète des extractions réalisées 
 depuis \gls{quadrige}, en conservant une description explicite des paramètres et traitements appliqués. Elle offre d’autre part une souplesse 
@@ -62,9 +53,10 @@ d’usage, en laissant aux administrateurs et gestionnaires de données la possi
 les fichiers produits avant toute intégration dans GeoNature ou Borbonica.
 
 
-Ce développement s’inscrit pleinement dans la dynamique d’amélioration continue portée par la DEAL Réunion et ses partenaires. 
-Il vise à renforcer progressivement la place des données issues du milieu marin au sein du système régional, tout en respectant 
-les contraintes techniques, méthodologiques et organisationnelles propres aux outils existants.
+Ce développement s’inscrit dans la dynamique d’amélioration continue portée par la DEAL Réunion
+et vise à renforcer durablement la représentation des données marines
+au sein du système régional.
+
 
 
 
@@ -79,26 +71,31 @@ géographique — principalement La Réunion, mais extensible à d’autres terr
 GeoNature offrait ensuite la possibilité de rechercher des programmes, d’affiner l’affichage par
 mots-clés et de sélectionner ceux à importer.
 
+Le module couvre les étapes d’exploration,
+de sélection et d’extraction des données,
+mais ne réalise pas l’import direct en base GeoNature.
+Il constitue une brique préparatoire,
+positionnée en amont des mécanismes d’intégration existants.
+
+
 Une fois les programmes choisis, l’utilisateur pouvait définir les filtres à appliquer aux données
 (la période d'intérêt et les champs souhaités, à l’exception de la \textit{monitoring location}, automatiquement reprise à partir des programmes sélectionnés).  
 Le module interrogeait alors l'api
 pour récupérer les observations correspondantes.
 
 
-Seuls les champs nécessaires à l’intégration dans GeoNature étaient retenus,
-conformément aux exigences du modèle \gls{sinp}.
-Une transformation était appliquée pour obtenir une
-structure compatible avec les mécanismes d’import de GeoNature.
 
 Enfin, le module produisait un fichier CSV intermédiaire, destiné à être importé via
 l’infrastructure existante de GeoNature. 
 Ce fichier constitue un support de contrôle et de préparation,
 distinct des archives produites lors de l’extraction des données proprement dite.
 
-Chaque opération d’import était consignée dans un
-historique affiché dans un second onglet, permettant de suivre les actions réalisées, leur date,
-leur statut et les éventuelles erreurs rencontrées. L’ensemble du module était réservé aux
-administrateurs, conformément aux pratiques habituelles de contrôle des imports dans GeoNature.
+Chaque opération est historisée afin de permettre
+le suivi des actions réalisées,
+l’identification des erreurs éventuelles
+et la consultation des extractions antérieures.
+L’accès au module est restreint aux profils administrateurs.
+
 
 \section{Conception technique du module d’import \gls{quadrige}}
 
@@ -183,31 +180,11 @@ et le rôle du backend GeoNature dans la transformation et le filtrage des résu
     \label{fig:data-flow-program-extraction}
 \end{figure}
 
-L’intérêt principal de ce schéma réside dans la manière dont sont traités
-les résultats retournés par l’API Quadrige lors de l’extraction des programmes.
-En effet, la requête GraphQL adressée à l’API permet d’identifier les programmes
-possédant au moins une instance associée à la \textit{monitoring location}
-sélectionnée par l’utilisateur. Toutefois, la réponse fournie par Quadrige
-prend la forme d’un fichier CSV contenant l’ensemble des instances de ces programmes,
-y compris celles localisées en dehors du périmètre géographique ciblé.
-
-Un traitement complémentaire est donc nécessaire côté backend GeoNature.
-Le CSV brut généré par l’API est d’abord conservé,
-puis filtré a posteriori afin de ne retenir que les instances effectivement
-rattachées à la \textit{monitoring location} sélectionnée.
-Ce filtrage repose notamment sur l’analyse des codes de localisation,
-permettant d’exclure les stations hors territoire d’intérêt.
-
-
-À l’issue de ce traitement, un CSV filtré est produit.
-Il ne conserve que les informations pertinentes pour la suite du processus,
-telles que le code du programme, son état, les dates associées,
-l’organisme responsable et les métadonnées nécessaires à la sélection
-des programmes dans l’interface GeoNature.
-Ce fichier constitue la base fonctionnelle utilisée par le frontend
-pour l’affichage, la recherche et la sélection des programmes à extraire.
-
-
+La Figure~\ref{fig:data-flow-program-extraction}
+synthétise le mécanisme de filtrage géographique
+appliqué aux résultats retournés par l’API Quadrige,
+ainsi que la séparation entre données brutes
+et données exploitées par l’interface GeoNature.
 
 \subsection{Extraction des données et orchestration des traitements asynchrones}
 
@@ -232,12 +209,12 @@ traçabilité.
 
 Un soin particulier a été apporté à la gestion des états et des erreurs tout au long du processus 
 d’extraction. Les situations suivantes sont explicitement prises en compte :
-\begin{itemize}
-  \item erreurs de communication avec l’\gls{api} \gls{graphql} ;
-  \item délais excessifs lors des extractions longues ;
-  \item incohérences ou réponses partielles retournées par l’\gls{api} ;
-  \item extractions aboutissant à des avertissements ou à l’absence de données.
-\end{itemize}
+
+Les principaux cas d’erreur et d’avertissement
+(retards, réponses partielles, absence de données)
+sont détectés et signalés de manière explicite,
+afin de permettre une analyse fine des résultats.
+
 
 Chaque extraction génère un retour structuré indiquant son statut, les avertissements éventuels 
 et les liens vers les fichiers produits. Ces informations sont transmises au frontend afin de 
@@ -253,61 +230,14 @@ nécessitant une vérification.
     \label{fig:data-flow-data-extraction}
 \end{figure}
 
-Ce schéma met en évidence le fonctionnement spécifique
-de la phase d’extraction des données associées aux programmes Quadrige.
+La Figure~\ref{fig:data-flow-data-extraction}
+illustre la séparation fonctionnelle
+entre l’identification des programmes
+et l’extraction des données associées.
+Cette organisation garantit la cohérence
+du périmètre géographique
+et sécurise le lancement des traitements.
 
-Lors de cette phase,
-la \textit{monitoring location} n’est volontairement pas fournie
-dans les filtres transmis par l’utilisateur.
-Elle est automatiquement reprise
-à partir des programmes précédemment extraits
-et filtrés lors de la phase d’extraction des programmes.
-Ce choix permet de garantir
-une cohérence stricte
-entre le périmètre géographique utilisé
-pour identifier les programmes
-et celui appliqué lors de l’extraction des observations.
-
-L’extraction des données est alors exécutée
-programme par programme,
-à partir de la liste sélectionnée par l’utilisateur
-dans l’interface GeoNature.
-Cette liste provient exclusivement
-du CSV filtré produit lors de l’extraction des programmes.
-Seuls les programmes effectivement rattachés
-au territoire d’intérêt
-peuvent ainsi être traités.
-
-Ce chaînage explicite entre les deux phases
-permet d’éviter les incohérences de paramétrage,
-notamment liées à une erreur de localisation.
-Il sécurise l’exécution des extractions
-en s’appuyant sur un périmètre déjà validé,
-plutôt que sur une saisie manuelle répétée des filtres.
-
-
-Plus largement,
-ce schéma met en évidence
-la séparation volontaire
-entre la phase d’extraction des programmes
-et celle de l’extraction des données associées,
-qui constitue un choix technique structurant du module.
-
-
-La phase d’extraction des programmes
-permet d’identifier, filtrer et qualifier
-les programmes disponibles sur un territoire donné,
-aboutissant à une liste contrôlée
-servant de base à l’ensemble des opérations ultérieures.
-
-La phase d’extraction des données
-s’appuie exclusivement sur cette liste
-et intervient dans un second temps,
-une fois les programmes visualisés et sélectionnés.
-Cette organisation permet à l’utilisateur
-de conserver une maîtrise fine
-sur le périmètre fonctionnel des extractions
-avant de lancer des traitements potentiellement longs.
 
 
 
@@ -359,26 +289,6 @@ Le bandeau supérieur rappelle le périmètre géographique utilisé,
 via le code de \textit{monitoring location} associé à La Réunion,
 ainsi que le nombre total de programmes extraits pour ce territoire.
 
-La liste centrale prend la forme d’un tableau synthétique,
-dans lequel chaque ligne correspond à un programme Quadrige distinct.
-Pour chacun d’eux sont affichés son identifiant,
-son libellé descriptif,
-sa date de début,
-son état d’activité
-ainsi que les organismes ou responsables associés.
-Ces informations constituent les métadonnées minimales
-nécessaires à une sélection éclairée des programmes à traiter.
-
-
-Compte tenu du nombre potentiellement élevé de programmes retournés,
-un mécanisme de recherche dynamique par mots-clés
-est intégré directement à l’interface.
-La barre de recherche permet de filtrer en temps réel
-la liste affichée
-en s’appuyant sur les métadonnées textuelles des programmes,
-facilitant ainsi l’identification rapide
-d’un programme particulier
-ou d’un ensemble thématique cohérent.
 
 Les programmes sont en outre explicitement sélectionnables,
 via des cases à cocher,
