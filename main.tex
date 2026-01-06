@@ -12,6 +12,10 @@
 \usepackage[main=french,provide=*]{babel}
 \usepackage{microtype}
 
+\usepackage[none]{hyphenat}
+\hyphenation{imports}
+
+
 \usepackage{graphicx}
 \usepackage{lmodern}
 \usepackage{geometry}
@@ -23,11 +27,16 @@
   bottom=3.5cm
 }
 
-\usepackage{titlesec}
+\usepackage[raggedright]{titlesec}
 \usepackage{setspace}
 \usepackage{fancyhdr}
 \usepackage{color}
 \usepackage{tocloft}
+
+\renewcommand{\cftchapfont}{\raggedright\bfseries\color{ENIBblue}}
+\renewcommand{\cftsecfont}{\raggedright}
+\renewcommand{\cftsubsecfont}{\raggedright}
+
 
 % Sommaire compact
 \setlength{\cftbeforechapskip}{0.3em}
@@ -79,11 +88,11 @@
 }
 
 
+
 \setstretch{1.55}
 
 \hyphenpenalty=500
 \exhyphenpenalty=50
-\sloppy
 
 
 % Empêcher l'interligne d'affecter les titres
@@ -136,7 +145,7 @@
   \clearpage
   \phantomsection
   \vspace*{0.6cm} % <-- ESPACE ENTRE L’EN-TÊTE ET LE TITRE
-  {\Huge\bfseries\color{ENIBblue}#1}\par
+  {\Huge\bfseries\color{ENIBblue}\raggedright #1}\par  
   \addcontentsline{toc}{chapter}{#1}%
   \vspace{1.5em}
 }
@@ -164,7 +173,7 @@
 \newcommand{\BlueChapterAnnexes}[1]{%
   \clearpage
   \phantomsection
-  {\Huge\bfseries\color{ENIBblue}#1}\par
+  {\Huge\bfseries\color{ENIBblue}\raggedright #1}\par
   \addcontentsline{toc}{chapter}{#1}%
   \vspace{0.8em} % <-- volontairement réduit
 }
@@ -432,14 +441,14 @@
 % ------------------------------------------
 % Developpement du module d'import Quadrige
 % ------------------------------------------
-\chapter{Developpement des modules d'imports de données}
+\chapter{Developpement des modules d'\allowbreak imports de données}
 \input{chapters/developpement_modules_imports/developpement_modules_imports.tex}
 
 
 % ------------------------------------------
 % Travaux réalisés et compétences acquises
 % ------------------------------------------
-\chapter{Travaux réalisés et compétences acquises}
+\chapter{Travaux réalisés et compétences \allowbreak acquises}
 
 \section{Synthèse des travaux réalisés}
 \input{chapters/travaux_et_competences_acquises/travaux_realises}
