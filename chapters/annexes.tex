@@ -11,6 +11,33 @@
 
 
 
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.9\textheight,
+        keepaspectratio
+    ]{croped_images/data_flow_schematics/extraction_programs_flow.png}
+    \caption{Schéma fonctionnel détaillé du processus d’extraction des programmes Quadrige,
+    depuis la définition du périmètre géographique jusqu’à la production des fichiers CSV exploitables
+    (\hyperref[fig:flow-program-extraction]{voir Figure~\ref*{fig:flow-program-extraction}, p.~\pageref*{fig:flow-program-extraction}}).}
+    \label{ann:flow-program-extraction}
+\end{figure}
+
+
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.9\textheight,
+        keepaspectratio
+    ]{croped_images/data_flow_schematics/extraction_data_flow.png}
+    \caption{Schéma fonctionnel détaillé de l’orchestration des traitements asynchrones
+    et de l’extraction des données associées aux programmes Quadrige
+    (\hyperref[fig:flow-data-extraction]{voir Figure~\ref*{fig:flow-data-extraction}, p.~\pageref*{fig:flow-data-extraction}}).}
+    \label{ann:flow-data-extraction}
+\end{figure}
 
 
 
@@ -23,18 +50,29 @@
 
 
 
-\textbf{Documentation du module Pl@ntNet}
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.9\textheight,
+        keepaspectratio
+    ]{croped_images/data_flow_schematics/plantnet_data_flow.png}
+    \caption{Schéma fonctionnel détaillé du flux d’import des données Pl@ntNet
+    dans GeoNature, depuis l’appel à l’API jusqu’à l’insertion en base
+    (\hyperref[fig:data-flow-GeoNature-Plantnet]{voir Figure~\ref*{fig:data-flow-GeoNature-Plantnet}, p.~\pageref*{fig:data-flow-GeoNature-Plantnet}}).}
+    \label{ann:data-flow-GeoNature-Plantnet}
+\end{figure}
 
-La documentation associée au module Pl@ntNet a été produite sous forme de fichiers Markdown
-afin de faciliter sa maintenance et sa réutilisation.
 
-Elle comprend :
-\begin{itemize}
-    \item une documentation technique décrivant l’architecture du client Python et du parser api2gn 
-    \item une documentation utilisateur détaillant les paramètres configurables et les cas d’usage 
-    \item un fichier \texttt{README.md} présentant le projet, son installation et ses dépendances
-\end{itemize}
-
-L’ensemble de cette documentation est disponible dans le dépôt GitHub, dans le dossier documentation :
-\href{https://github.com/basileandre056/api2GN/tree/main/documentation}{documentation}
-
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.9\textheight,
+        keepaspectratio
+    ]{croped_images/data_flow_schematics/validation_taxref.png}
+    \caption{Schéma fonctionnel détaillé de la procédure de validation
+    du nom scientifique des observations Pl@ntNet
+    (\hyperref[fig:process-validation-TAXREF]{voir Figure~\ref*{fig:process-validation-TAXREF}, p.~\pageref*{fig:process-validation-TAXREF}}).}
+    \label{ann:process-validation-TAXREF}
+\end{figure}

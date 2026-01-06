@@ -57,6 +57,13 @@ Ce développement s’inscrit dans la dynamique d’amélioration continue port�
 et vise à renforcer durablement la représentation des données marines
 au sein du système régional.
 
+Afin de préserver la lisibilité du chapitre tout en fournissant
+un niveau de détail suffisant sur les architectures, les flux de données
+et les interfaces du module développé, les schémas fonctionnels
+et les captures d’écran les plus détaillés ont été regroupés en annexe.
+Le chapitre présente uniquement les éléments nécessaires à la compréhension
+globale du fonctionnement du module, tandis que les figures complètes
+sont accessibles en annexe pour une consultation approfondie.
 
 
 
@@ -172,16 +179,18 @@ Quadrige, depuis la sélection d’un périmètre géographique par l’administ
 jusqu’à la mise à disposition des fichiers CSV exploitables dans GeoNature.
 Elle met en évidence le fonctionnement asynchrone de l’API Quadrige
 et le rôle du backend GeoNature dans la transformation et le filtrage des résultats retournés.
-
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{croped_images/data_flow_schematics/extraction_programs_flow.png}
-    \caption{Schéma fonctionnel des échanges de données entre GeoNature et le système Quadrige lors de l'extraction des programmes}
-    \label{fig:data-flow-program-extraction}
+    \includegraphics[width=0.65\textwidth]{croped_images/data_flow_schematics/extraction_programs_flow.png}
+    \caption{Flux général d’extraction des programmes Quadrige}
+    \label{fig:flow-program-extraction}
 \end{figure}
 
-La Figure~\ref{fig:data-flow-program-extraction}
-synthétise le mécanisme de filtrage géographique
+La version détaillée de ce schéma est fournie en annexe
+(voir Annexe~\ref{ann:flow-program-extraction}).
+
+
+Cette figure synthétise le mécanisme de filtrage géographique
 appliqué aux résultats retournés par l’API Quadrige,
 ainsi que la séparation entre données brutes
 et données exploitées par l’interface GeoNature.
@@ -221,17 +230,18 @@ et les liens vers les fichiers produits. Ces informations sont transmises au fro
 permettre à l’utilisateur d’identifier rapidement les extractions exploitables et celles 
 nécessitant une vérification.
 
-
-
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{croped_images/data_flow_schematics/extraction_data_flow.png}
-    \caption{Schéma fonctionnel des échanges de données entre GeoNature et le système Quadrige lors de l'extraction des données des programmes}
-    \label{fig:data-flow-data-extraction}
+    \includegraphics[width=0.65\textwidth]{croped_images/data_flow_schematics/extraction_data_flow.png}
+    \caption{Organisation générale de l’extraction des données Quadrige}
+    \label{fig:flow-data-extraction}
 \end{figure}
 
-La Figure~\ref{fig:data-flow-data-extraction}
-illustre la séparation fonctionnelle
+La version détaillée de ce schéma est présentée en annexe
+(voir Annexe~\ref{ann:flow-data-extraction}).
+
+
+Cette figure illustre la séparation fonctionnelle
 entre l’identification des programmes
 et l’extraction des données associées.
 Cette organisation garantit la cohérence
@@ -269,7 +279,6 @@ pour un périmètre géographique donné.
 Elle correspond à l’état stable du système
 une fois le traitement asynchrone d’extraction terminé
 et les fichiers CSV filtrés générés côté backend.
-
 
 
 
@@ -658,7 +667,9 @@ dans la table \textit{Synthèse} de GeoNature.
     \label{fig:data-flow-GeoNature-Plantnet}
 \end{figure}
 
-Ce schéma illustre le fonctionnement global du parser Pl@ntNet
+La version détaillée de ce schéma est fournie en annexe
+(voir Annexe~\ref{ann:data-flow-GeoNature-Plantnet}).
+Il illustre le fonctionnement global du parser Pl@ntNet
 et met en évidence le rôle central joué par la configuration
 dans le pilotage de l’import.
 
@@ -756,6 +767,9 @@ et de validation du nom scientifique appliquée à chaque observation Pl@ntNet.
     \caption{Schema de la procédure de validation du nom scientifique retourné par Pl@ntnet}
     \label{fig:process-validation-TAXREF}
 \end{figure}
+
+La version détaillée de ce schéma est fournie en annexe
+(voir Annexe~\ref{ann:process-validation-TAXREF}).
 
 Cette chaîne de validation illustre le rôle clé du référentiel TAXREF
 dans la sécurisation des imports.
