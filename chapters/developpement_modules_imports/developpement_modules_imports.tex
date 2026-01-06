@@ -27,13 +27,12 @@ temporelles et les types d’observations d’intérêt. Le fonctionnement de l�
 dans la documentation officielle mise à disposition par 
 l’Ifremer \href{https://quadrige-core.ifremer.fr/api/extraction/doc?doc=standard&lang=fr&name=result&type=standard}{Documentation officielle de l’API Quadrige}.
 
-
-Cette évolution ouvre la voie à une exploitation plus systématique de ces données 
-par des acteurs institutionnels tels que la DEAL, et à leur mobilisation progressive dans le cadre du \gls{sinp}.
+Cette évolution ouvre la voie à une exploitation plus systématique de ces données
+par des acteurs institutionnels, et à leur mobilisation progressive dans le cadre du \gls{sinp}.
 
 C’est dans ce cadre que s’inscrit le projet développé durant le stage. L’objectif n’était pas de réaliser une intégration 
 directe et entièrement automatisée des données \gls{quadrige} dans la base GeoNature, mais de concevoir un module externe permettant 
-d’explorer, d’extraire et de préparer ces données de manière structurée, traçable et reproductible. Le module développé interroge 
+d’explorer, d’extraire et de préparer ces données de manière structurée et contrôlée. Le module développé interroge 
 l’\gls{api} \gls{quadrige} afin d’identifier les programmes pertinents pour le territoire réunionnais, puis permet d’en extraire les observations 
 associées selon des critères définis par l’utilisateur.
 Les résultats de ces extractions ne prennent pas la forme de fichiers immédiatement importables dans GeoNature. 
@@ -61,8 +60,8 @@ l’ensemble des programmes possédant au moins une instance sur le territoire d
 Cette approche intermédiaire répond à plusieurs objectifs. Elle garantit d’une part la traçabilité complète des extractions réalisées 
 depuis \gls{quadrige}, en conservant une description explicite des paramètres et traitements appliqués. Elle offre d’autre part une souplesse 
 d’usage, en laissant aux administrateurs et gestionnaires de données la possibilité de contrôler, d’analyser et, le cas échéant, d’adapter 
-les fichiers produits avant toute intégration dans GeoNature ou Borbonica. Le module s’inscrit ainsi comme une brique préparatoire, destinée 
-à sécuriser et à faciliter l’intégration future des données marines dans le \gls{sinp}.
+les fichiers produits avant toute intégration dans GeoNature ou Borbonica.
+
 
 Ce développement s’inscrit pleinement dans la dynamique d’amélioration continue portée par la DEAL Réunion et ses partenaires. 
 Il vise à renforcer progressivement la place des données issues du milieu marin au sein du système régional, tout en respectant 
@@ -82,16 +81,22 @@ GeoNature offrait ensuite la possibilité de rechercher des programmes, d’affi
 mots-clés et de sélectionner ceux à importer.
 
 Une fois les programmes choisis, l’utilisateur pouvait définir les filtres à appliquer aux données
-(la période d'intérêt, les champs souhaités, ou encore la reprise des stations déjà extraites).  
+(la période d'intérêt et les champs souhaités, à l’exception de la \textit{monitoring location}, automatiquement reprise à partir des programmes sélectionnés).  
 Le module interrogeait alors l'api
 pour récupérer les observations correspondantes.
-Seuls les champs utiles au modèle \gls{sinp} étaient extraits : identifiants des programmes et stations,
-localisation géographique, taxon observé, date, ainsi que les métadonnées essentielles (auteur,
-organisme, méthode d’acquisition, etc.). Une transformation était appliquée pour obtenir une
+
+
+Seuls les champs nécessaires à l’intégration dans GeoNature étaient retenus,
+conformément aux exigences du modèle \gls{sinp}.
+Une transformation était appliquée pour obtenir une
 structure compatible avec les mécanismes d’import de GeoNature.
 
 Enfin, le module produisait un fichier CSV intermédiaire, destiné à être importé via
-l’infrastructure existante de GeoNature. Chaque opération d’import était consignée dans un
+l’infrastructure existante de GeoNature. 
+Ce fichier constitue un support de contrôle et de préparation,
+distinct des archives produites lors de l’extraction des données proprement dite.
+
+Chaque opération d’import était consignée dans un
 historique affiché dans un second onglet, permettant de suivre les actions réalisées, leur date,
 leur statut et les éventuelles erreurs rencontrées. L’ensemble du module était réservé aux
 administrateurs, conformément aux pratiques habituelles de contrôle des imports dans GeoNature.
@@ -188,7 +193,7 @@ prend la forme d’un fichier CSV contenant l’ensemble des instances de ces pr
 y compris celles localisées en dehors du périmètre géographique ciblé.
 
 Un traitement complémentaire est donc nécessaire côté backend GeoNature.
-Le CSV brut généré par l’API est d’abord conservé à des fins de traçabilité,
+Le CSV brut généré par l’API est d’abord conservé,
 puis filtré a posteriori afin de ne retenir que les instances effectivement
 rattachées à la \textit{monitoring location} sélectionnée.
 Ce filtrage repose notamment sur l’analyse des codes de localisation,
@@ -283,43 +288,29 @@ plutôt que sur une saisie manuelle répétée des filtres.
 
 
 Plus largement,
-l’intérêt principal de ce schéma réside
-dans la séparation volontaire
+ce schéma met en évidence
+la séparation volontaire
 entre la phase d’extraction des programmes
-et celle de l’extraction des données associées.
-Ce découpage ne répond pas uniquement
-à des considérations ergonomiques,
-mais constitue un choix technique structurant du module.
+et celle de l’extraction des données associées,
+qui constitue un choix technique structurant du module.
+
 
 La phase d’extraction des programmes
 permet d’identifier, filtrer et qualifier
-les programmes disponibles sur un territoire donné.
-Elle aboutit à une liste contrôlée,
-exploitable par l’utilisateur,
-qui sert de base à toutes les opérations ultérieures.
+les programmes disponibles sur un territoire donné,
+aboutissant à une liste contrôlée
+servant de base à l’ensemble des opérations ultérieures.
 
-La phase d’extraction des données,
-quant à elle,
-s’appuie exclusivement sur cette liste.
-Elle intervient dans un second temps,
-une fois les programmes visualisés,
-analysés et sélectionnés.
+La phase d’extraction des données
+s’appuie exclusivement sur cette liste
+et intervient dans un second temps,
+une fois les programmes visualisés et sélectionnés.
 Cette organisation permet à l’utilisateur
 de conserver une maîtrise fine
-sur le périmètre fonctionnel des extractions,
-en pouvant exclure certains programmes
-ou ajuster sa sélection
+sur le périmètre fonctionnel des extractions
 avant de lancer des traitements potentiellement longs.
 
-Ainsi, ce schéma illustre une chaîne d’extraction
-progressive et contrôlée,
-dans laquelle la séparation
-entre identification des programmes
-et extraction des données
-constitue un levier essentiel
-de robustesse,
-de cohérence
-et de maîtrise des traitements.
+
 
 
 \subsection{Interface utilisateur et pilotage des extractions}
@@ -538,12 +529,81 @@ tout en incitant à une configuration explicite en environnement de production.
 Elle ouvre également la voie à une future interface d’administration graphique dédiée 
 au pilotage de ces paramètres.
 
+La Figure~\ref{fig:data-flow-GeoNature-Plantnet} synthétise le déroulement général
+du flux d’import des données Pl@ntNet,
+depuis l’interrogation de l’API jusqu’à l’insertion des observations validées
+dans la table \textit{Synthèse} de GeoNature.
+
+
 \begin{figure}[H]
     \centering
     \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/plantnet_data_flow.png}
     \caption{Schéma fonctionnel des échanges de données entre Géonature et Pl@ntnet}
     \label{fig:data-flow-GeoNature-Plantnet}
 \end{figure}
+
+Ce schéma illustre le fonctionnement global du parser Pl@ntNet
+et met en évidence le rôle central joué par la configuration
+dans le pilotage de l’import.
+
+À la différence du module \gls{quadrige},
+l’import Pl@ntNet repose entièrement sur un fichier de configuration externe.
+
+L’administrateur GeoNature définit les paramètres de l’extraction
+dans un fichier \texttt{api2gn\_config.toml},
+qui doit être placé dans le répertoire \texttt{geonature/config}
+avant le redémarrage de l’application.
+Ce mécanisme conditionne l’ensemble du comportement du parser :
+périmètre géographique, période temporelle,
+liste d’espèces, volume maximal de données
+et règles de validation taxonomique.
+
+Ce choix d’architecture permet une extraction entièrement personnalisée,
+reproductible et traçable,
+au prix d’une intervention plus technique de l’administrateur.
+Il constitue un compromis assumé,
+adapté à un fonctionnement automatisé et périodique,
+et ouvre la voie à une évolution future vers une interface graphique dédiée,
+évoquée dans le chapitre consacré aux perspectives.
+
+
+Le schéma met en évidence l’existence d’un mécanisme de limitation
+et de pagination des résultats retournés par l’API Pl@ntNet,
+sans en détailler le fonctionnement interne.
+Cette abstraction volontaire permet de conserver
+une lecture fonctionnelle du flux,
+centrée sur la construction de la requête
+et la réception des occurrences.
+
+Concrètement, le contrôle du volume de données importées
+repose sur une pagination basée sur un couple
+\texttt{limit}/\texttt{offset},
+imposé par l’API Pl@ntNet et exploité par le parser.
+La valeur de la limite est définie
+par le paramètre \texttt{plantnet\_max\_data}
+du fichier de configuration.
+Elle correspond au nombre maximal d’occurrences
+récupérées lors d’un appel à l’API
+et conditionne la taille des blocs traités successivement.
+
+Après chaque appel,
+le parser incrémente automatiquement l’offset
+afin de solliciter la page suivante de résultats.
+L’itération se poursuit
+jusqu’à ce que l’API retourne un nombre d’occurrences
+inférieur à la limite demandée,
+ce qui marque la fin des données disponibles
+pour le périmètre et les filtres définis.
+
+Ce mécanisme permet de maîtriser précisément
+le volume total d’observations traitées,
+tout en limitant la charge réseau et mémoire.
+Un seuil de sécurité supplémentaire est implémenté côté parser
+afin d’interrompre l’extraction
+si le nombre de pages devient excessif,
+prévenant ainsi toute dérive liée à une configuration inadaptée
+ou à un comportement inattendu de l’API distante.
+
 
 
 \subsection{Résolution taxonomique et contrôle de la qualité des données}
@@ -570,12 +630,24 @@ Toute observation pour laquelle aucun \texttt{cd\_nom} valide ne peut être rés
 Ces rejets sont systématiquement journalisés, ce qui permet d’identifier les taxons problématiques 
 et d’évaluer la qualité globale des données importées.
 
+La Figure~\ref{fig:process-validation-TAXREF} détaille la procédure de résolution
+et de validation du nom scientifique appliquée à chaque observation Pl@ntNet.
+
+
 \begin{figure}[H]
     \centering
     \includegraphics[width= 0.9\textwidth]{images/data_flow_schematics/validation_taxref.png}
     \caption{Schema de la procédure de validation du nom scientifique retourné par Pl@ntnet}
     \label{fig:process-validation-TAXREF}
 \end{figure}
+
+Cette chaîne de validation illustre le rôle clé du référentiel TAXREF
+dans la sécurisation des imports.
+Le recours prioritaire au référentiel local,
+complété par l’appel au service TAXREF-LD,
+permet de concilier performance et exhaustivité,
+tout en garantissant la cohérence avec le modèle du \gls{sinp}.
+
 
 
 \subsection{Traçabilité, sécurité et automatisation des imports}
